@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+/* ===============================
+    DESIGN TOKENS (LIGHT MODE DEFAULT)
+================================ */
+:root {
+	/* Brand Colors */
+	--primary: #045694;
+	--secondary: #044a80;
+	--accent: #0a84ff;
+
+	/* Text Colors */
+	--text-primary: #03122b;
+	--text-secondary: #505b73;
+	--text-muted: #aab0be;
+
+	/* UI */
+	--border: #e4e8f0;
+	--background: #eef2fb;
+	--surface: #ffffff;
+	--transparent: transparent;
+}
+
+/* ===============================
+    TAILWIND THEME MAPPING
+================================ */
+@theme inline {
+	/* Colors */
+	--color-primary: var(--primary);
+	--color-secondary: var(--secondary);
+	--color-accent: var(--accent);
+
+	--color-text: var(--text-primary);
+	--color-text-secondary: var(--text-secondary);
+	--color-text-muted: var(--text-muted);
+	
+	--color-surface: var(--surface);
+	--color-bg: var(--background);
+	--color-border: var(--border);
+
+	/* Fonts */
+	--font-sans: var(--font-geist-sans);
+}
+
+/* ===============================
+    BASE STYLES
+================================ */
+html {
+	background-color: var(--background);
+	font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+body {
+	color: var(--text-primary);
+	background-color: var(--background);
+	-webkit-font-smoothing: antialiased;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+.scrollbar-hide {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+/* ===============================
+    CUSTOM UTILITIES
+================================ */
+@layer utilities {
+	.bg-bg {
+		background-color: var(--background);
+	}
+	
+	.bg-surface {
+		background-color: var(--surface);
+	}
+	
+	.border-border {
+		border-color: var(--border);
+	}
+	
+	.text-text {
+		color: var(--text-primary);
+	}
+	
+	.text-text-secondary {
+		color: var(--text-secondary);
+	}
+	
+	.text-text-muted {
+		color: var(--text-muted);
+	}
+	
+	.bg-primary {
+		background-color: var(--primary);
+	}
+	
+	.bg-secondary {
+		background-color: var(--secondary);
+	}
+	
+	.bg-accent {
+		background-color: var(--accent);
+	}
+	
+	.text-primary {
+		color: var(--primary);
+	}
+	
+	.text-accent {
+		color: var(--accent);
+	}
+	
+	.ring-primary\/20 {
+		--tw-ring-color: rgb(4 86 148 / 0.2);
+	}
+	
+	.ring-accent\/30 {
+		--tw-ring-color: rgb(10 132 255 / 0.3);
+	}
+	
+	.focus\:border-primary:focus {
+		border-color: var(--primary);
+	}
+	
+	.focus\:border-accent:focus {
+		border-color: var(--accent);
+	}
+	
+	.hover\:bg-secondary:hover {
+		background-color: var(--secondary);
+	}
+	
+	.hover\:text-accent:hover {
+		color: var(--accent);
+	}
+}
