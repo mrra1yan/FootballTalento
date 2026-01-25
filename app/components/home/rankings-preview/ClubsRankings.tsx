@@ -40,23 +40,28 @@ export default function ClubsRankings() {
 	return (
 		<div className="space-y-3">
 			{clubs.map((club) => (
-				<div key={club.id} className="flex items-center justify-between bg-background border border-border rounded-xl p-4 sm:p-6 hover:shadow-sm transition">
-					<div className="flex items-center gap-4">
-						<div className="w-8 text-xl font-black text-primary">{club.rank}</div>
+				<div key={club.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-bg border border-border rounded-xl p-4 sm:p-6 hover:shadow-sm transition">
+					<div className="flex items-center gap-4 min-w-0">
+						<div className="hidden sm:block w-8 text-xl font-black text-primary shrink-0">{club.rank}</div>
 
-						<div className="w-12 h-12 rounded bg-border flex items-center justify-center">
+						<div className="w-12 h-12 rounded bg-border flex items-center justify-center shrink-0">
 							<Image src={club.logo} alt={club.name} width={40} height={40} className="object-contain" />
 						</div>
 
-						<div>
-							<div className="font-semibold text-text">{club.name}</div>
+						<div className="min-w-0">
+							<div className="font-semibold text-text truncate">{club.name}</div>
 							<div className="text-sm text-text-secondary">{club.country}</div>
 						</div>
 					</div>
 
-					<div className="text-right">
+					<div className="hidden sm:block text-right">
 						<div className="text-xs text-text-muted mb-1">ClubScore</div>
 						<div className="text-2xl font-black text-primary">{club.score}</div>
+					</div>
+
+					<div className="sm:hidden pt-3 border-t border-border flex items-center justify-between text-sm">
+						<span className="text-text-secondary">ClubScore</span>
+						<span className="text-xl font-black text-primary">{club.score}</span>
 					</div>
 				</div>
 			))}

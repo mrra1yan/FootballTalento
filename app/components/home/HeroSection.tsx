@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const slides = [
 	{
@@ -28,48 +29,100 @@ const slides = [
 
 export default function HeroSection() {
 	const [active, setActive] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+    
+    const handleNext = () => {
+		setActive((prev) => (prev + 1) % slides.length);
+	};
 
+	const handlePrev = () => {
+		setActive((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+	};
+
+
+
+	
 	useEffect(() => {
+		if (isPaused) return;
+
 		const interval = setInterval(() => {
 			setActive((prev) => (prev + 1) % slides.length);
 		}, 7000);
 
 		return () => clearInterval(interval);
-	}, []);
+	}, [isPaused, slides.length]);
+
+	useEffect(() => {
+		if (!isPaused) return;
+
+		const resumeTimer = setTimeout(() => {
+			setIsPaused(false);
+		}, 10000); // resume autoplay after 10s
+
+		return () => clearTimeout(resumeTimer);
+	}, [isPaused]);
+
+
 
 	const slide = slides[active];
 
 	return (
-		<section className="relative min-h-screen overflow-hidden">
-			{/* Background */}
+		<section className="relative overflow-hidden bg-black">
 			<div className="absolute inset-0">
-				<img key={slide.id} src={slide.image} alt="FootballTalento hero background" className="w-full h-full object-cover scale-105 transition-transform duration-1400 ease-out" />
+				{slides.map((s, i) => (
+					<div key={s.id} className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${i === active ? "opacity-100" : "opacity-0"}`}>
+						<Image src={s.image} alt={s.title} fill sizes="100vw" priority={i === 0} className="object-cover scale-105" />
+					</div>
+				))}
 				<div className="absolute inset-0 bg-black/80" />
 			</div>
 
-			{/* Slider Navigation */}
-			<div className="absolute z-20 flex items-center gap-4 bottom-6 left-1/2 -translate-x-1/2 sm:bottom-auto sm:left-4 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 sm:flex-col">
-				{/* Previous */}
-				<button onClick={() => setActive((p) => (p === slides.length - 1 ? 0 : p + 1))} className="w-8 h-8 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/20 transition flex items-center justify-center" aria-label="Next slide">
-					<i className="fa-solid fa-chevron-down rotate-90 sm:rotate-0 text-sm" />
+			<div
+				className="
+					absolute z-20
+					bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4
+					sm:bottom-auto sm:left-auto sm:right-6 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 sm:flex-col
+				"
+			>
+				<button
+					onClick={() => {
+						setIsPaused(true);
+						handlePrev();
+					}}
+					aria-label="Previous slide"
+					className="w-8 h-8 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/20 transition flex items-center justify-center"
+				>
+					<i className="fa-solid fa-chevron-up -rotate-90 sm:rotate-0 text-sm transition-transform" />
 				</button>
 
-				{/* Dots */}
 				<div className="flex gap-3 sm:flex-col">
 					{slides.map((_, i) => (
-						<button key={i} onClick={() => setActive(i)} className={`w-2.5 h-2.5 rounded-full transition-all ${active === i ? "bg-accent scale-125" : "bg-white/40 hover:bg-white"}`} aria-label={`Go to slide ${i + 1}`} />
+						<button
+							key={i}
+							onClick={() => {
+								setIsPaused(true);
+								setActive(i);
+							}}
+							aria-label={`Go to slide ${i + 1}`}
+							className={`w-2.5 h-2.5 rounded-full transition-all ${active === i ? "bg-accent scale-125" : "bg-white/40 hover:bg-white"}`}
+						/>
 					))}
 				</div>
 
-				{/* Next */}
-				<button onClick={() => setActive((p) => (p === 0 ? slides.length - 1 : p - 1))} className="w-8 h-8 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/20 transition flex items-center justify-center" aria-label="Previous slide">
-					<i className="fa-solid fa-chevron-up rotate-90 sm:rotate-0 text-sm" />
+				<button
+					onClick={() => {
+						setIsPaused(true);
+						handleNext();
+					}}
+					aria-label="Next slide"
+					className="w-8 h-8 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/20 transition flex items-center justify-center"
+				>
+					<i className="fa-solid fa-chevron-down -rotate-90 sm:rotate-0 text-sm transition-transform" />
 				</button>
 			</div>
 
-			{/* Content */}
-			<div className="relative z-10 min-h-screen flex items-start sm:items-center">
-				<div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-0">
+			<div className="relative z-10 min-h-[90vh] sm:min-h-screen flex items-center">
+				<div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:pt-0">
 					<div key={slide.id} className="max-w-xl lg:max-w-4xl animate-slide-up">
 						{/* Badges */}
 						<div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
@@ -111,16 +164,9 @@ export default function HeroSection() {
 					</div>
 				</div>
 			</div>
-
-			{/* Scroll Indicator */}
-			<div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70">
-				<i className="fa-solid fa-chevron-down animate-bounce" />
-			</div>
 		</section>
 	);
 }
-
-/* Helpers */
 
 function Badge({ icon, text }: { icon: string; text: string }) {
 	return (

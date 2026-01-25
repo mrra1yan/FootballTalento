@@ -105,7 +105,7 @@ export default function RegisterPage() {
 	}
 
 	return (
-		<main className="min-h-screen flex items-center justify-center px-4 pt-24 pb-16">
+		<main className="min-h-screen flex items-center justify-center pt-16 sm:pt-36 sm:pb-18.25">
 			<div className="w-full max-w-2xl">
 				<div className="bg-surface border border-border rounded-2xl shadow-xl overflow-hidden">
 					{/* Header */}
@@ -136,13 +136,10 @@ export default function RegisterPage() {
 							<label className="block mb-2 text-sm font-semibold">
 								Account Type <span className="text-red-500">*</span>
 							</label>
-							<select 
-								required 
-								value={accountType} 
-								onChange={(e) => setAccountType(e.target.value)} 
-								className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20"
-							>
-								<option value="" disabled>Select your role</option>
+							<select required value={accountType} onChange={(e) => setAccountType(e.target.value)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20">
+								<option value="" disabled>
+									Select your role
+								</option>
 								<option value="player">Player</option>
 								<option value="club">Club / Academy</option>
 								<option value="scout">Scout</option>
@@ -160,28 +157,14 @@ export default function RegisterPage() {
 								<label className="block mb-2 text-sm font-semibold">
 									Full Name <span className="text-red-500">*</span>
 								</label>
-								<input 
-									type="text" 
-									required 
-									value={fullName} 
-									onChange={(e) => setFullName(e.target.value)} 
-									placeholder="John Doe" 
-									className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20" 
-								/>
+								<input type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="John Doe" className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20" />
 							</div>
 
 							<div>
 								<label className="block mb-2 text-sm font-semibold">
 									Email Address <span className="text-red-500">*</span>
 								</label>
-								<input 
-									type="email" 
-									required 
-									value={email} 
-									onChange={(e) => setEmail(e.target.value)} 
-									placeholder="john@example.com" 
-									className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20" 
-								/>
+								<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="john@example.com" className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20" />
 							</div>
 						</div>
 
@@ -196,15 +179,14 @@ export default function RegisterPage() {
 									<span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted">
 										<i className="fa-solid fa-flag" />
 									</span>
-									<select 
-										required 
-										value={country} 
-										onChange={(e) => setCountry(e.target.value)} 
-										className="w-full rounded-lg border border-border bg-surface px-4 py-3 pl-12 focus:border-primary focus:outline-none focus:ring-primary/20"
-									>
-										<option value="" disabled>Select your country</option>
+									<select required value={country} onChange={(e) => setCountry(e.target.value)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 pl-12 focus:border-primary focus:outline-none focus:ring-primary/20">
+										<option value="" disabled>
+											Select your country
+										</option>
 										{countries.map((c) => (
-											<option key={c.code} value={c.code}>{c.name}</option>
+											<option key={c.code} value={c.code}>
+												{c.name}
+											</option>
 										))}
 									</select>
 								</div>
@@ -219,15 +201,14 @@ export default function RegisterPage() {
 									<span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted">
 										<i className="fa-solid fa-dollar-sign" />
 									</span>
-									<select 
-										required 
-										value={currency} 
-										onChange={(e) => setCurrency(e.target.value)} 
-										className="w-full rounded-lg border border-border bg-surface px-4 py-3 pl-12 focus:border-primary focus:outline-none focus:ring-primary/20"
-									>
-										<option value="" disabled>Select currency</option>
+									<select required value={currency} onChange={(e) => setCurrency(e.target.value)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 pl-12 focus:border-primary focus:outline-none focus:ring-primary/20">
+										<option value="" disabled>
+											Select currency
+										</option>
 										{currencies.map((c) => (
-											<option key={c.code} value={c.code}>{c.name}</option>
+											<option key={c.code} value={c.code}>
+												{c.name}
+											</option>
 										))}
 									</select>
 								</div>
@@ -241,19 +222,8 @@ export default function RegisterPage() {
 							</label>
 
 							<div className="relative">
-								<input 
-									type={showPassword ? "text" : "password"} 
-									value={password} 
-									onChange={(e) => setPassword(e.target.value)} 
-									required 
-									placeholder="••••••••" 
-									className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:border-primary focus:outline-none focus:ring-primary/20" 
-								/>
-								<button 
-									type="button" 
-									onClick={() => setShowPassword(!showPassword)} 
-									className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted"
-								>
+								<input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:border-primary focus:outline-none focus:ring-primary/20" />
+								<button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted">
 									<i className={`fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`} />
 								</button>
 							</div>
@@ -263,9 +233,7 @@ export default function RegisterPage() {
 								<div className="mt-4 rounded-lg border border-border bg-bg p-4">
 									<div className="flex justify-between mb-3">
 										<span className="text-xs font-semibold text-text-muted">PASSWORD STRENGTH</span>
-										<span className={`text-xs font-bold ${strengthLabel === "STRONG" ? "text-green-600" : strengthLabel === "MEDIUM" ? "text-amber-600" : "text-red-600"}`}>
-											{strengthLabel}
-										</span>
+										<span className={`text-xs font-bold ${strengthLabel === "STRONG" ? "text-green-600" : strengthLabel === "MEDIUM" ? "text-amber-600" : "text-red-600"}`}>{strengthLabel}</span>
 									</div>
 
 									<div className="flex gap-1.5 mb-4">
@@ -293,56 +261,28 @@ export default function RegisterPage() {
 								</label>
 
 								<div className="relative">
-									<input 
-										type={showConfirmPassword ? "text" : "password"} 
-										value={confirmPassword} 
-										onChange={(e) => setConfirmPassword(e.target.value)} 
-										required 
-										placeholder="••••••••" 
-										className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:border-primary focus:outline-none focus:ring-primary/20" 
-									/>
-									<button 
-										type="button" 
-										onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
-										className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted"
-									>
+									<input type={showConfirmPassword ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required placeholder="••••••••" className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:border-primary focus:outline-none focus:ring-primary/20" />
+									<button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted">
 										<i className={`fa-regular ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`} />
 									</button>
 								</div>
 
-								{confirmPassword && password !== confirmPassword && (
-									<p className="mt-1 text-xs text-red-500">Passwords do not match</p>
-								)}
-								{confirmPassword && password === confirmPassword && (
-									<p className="mt-1 text-xs text-green-500">Passwords match!</p>
-								)}
+								{confirmPassword && password !== confirmPassword && <p className="mt-1 text-xs text-red-500">Passwords do not match</p>}
+								{confirmPassword && password === confirmPassword && <p className="mt-1 text-xs text-green-500">Passwords match!</p>}
 							</div>
 						)}
 
 						{/* Parent Consent for Players */}
-						{accountType === 'player' && (
+						{accountType === "player" && (
 							<div className="flex items-start gap-3 bg-bg p-4 rounded-lg border border-border">
-								<input 
-									type="checkbox" 
-									checked={parentConsent}
-									onChange={(e) => setParentConsent(e.target.checked)}
-									className="h-5 w-5 accent-primary mt-0.5" 
-								/>
-								<p className="text-sm text-text">
-									I confirm that I have parental/guardian consent (required for players under 18)
-								</p>
+								<input type="checkbox" checked={parentConsent} onChange={(e) => setParentConsent(e.target.checked)} className="h-5 w-5 accent-primary mt-0.5" />
+								<p className="text-sm text-text">I confirm that I have parental/guardian consent (required for players under 18)</p>
 							</div>
 						)}
 
 						{/* Terms */}
 						<div className="flex items-start gap-3 bg-bg p-4 rounded-lg border border-border">
-							<input 
-								type="checkbox" 
-								required 
-								checked={termsAccepted}
-								onChange={(e) => setTermsAccepted(e.target.checked)}
-								className="h-5 w-5 accent-primary mt-0.5" 
-							/>
+							<input type="checkbox" required checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} className="h-5 w-5 accent-primary mt-0.5" />
 							<p className="text-sm text-text">
 								I agree to the{" "}
 								<Link href="/terms" className="text-primary font-semibold">
@@ -356,11 +296,7 @@ export default function RegisterPage() {
 						</div>
 
 						{/* Submit */}
-						<button 
-							type="submit" 
-							disabled={!canSubmit} 
-							className="w-full rounded-lg bg-primary py-4 font-bold text-white transition disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary"
-						>
+						<button type="submit" disabled={!canSubmit} className="w-full rounded-lg bg-primary py-4 font-bold text-white transition disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary">
 							{isSubmitting ? (
 								<span className="flex items-center justify-center gap-2">
 									<i className="fa-solid fa-spinner fa-spin" />

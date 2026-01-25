@@ -21,10 +21,10 @@ export default function HowItWorksSection() {
 	];
 
 	return (
-		<section id="how-it-works" className="py-12 sm:py-16 lg:py-24 bg-bg">
+		<section id="how-it-works" className="py-5 sm:py-10">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				{/* Header */}
-				<div className="mx-auto mb-10 sm:mb-14">
+				<div className="mx-auto mb-8">
 					<h2 className="text-2xl sm:text-3xl lg:text-5xl font-black text-text mb-3 sm:mb-4">How FootballTalento Works</h2>
 
 					<p className="text-sm sm:text-base lg:text-lg text-text-secondary">From creating your profile to growing your sports career, we’ve made every step simple and effective.</p>
@@ -34,7 +34,6 @@ export default function HowItWorksSection() {
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 					{steps.map((step) => (
 						<div key={step.id} className="relative group bg-surface border border-border rounded-2xl px-4 py-8 sm:px-6 sm:py-10 lg:px-6 lg:py-10 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-							{/* Hover number (unchanged logic) */}
 							<span className="pointer-events-none absolute right-0 top-[5%] -translate-y-1/2 text-[72px] sm:text-[88px] lg:text-[96px] font-black text-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 select-none">{step.id}</span>
 
 							{/* Content */}

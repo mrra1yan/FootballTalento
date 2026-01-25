@@ -82,22 +82,18 @@ function ResetPasswordContent() {
 	// Success Screen
 	if (success) {
 		return (
-			<main className="min-h-screen bg-bg flex items-center justify-center px-4 pt-24 pb-16">
+			<main className="min-h-screen bg-bg flex items-center justify-center pt-16 sm:pt-18.25">
 				<section className="w-full max-w-xl">
 					{/* Success Card */}
 					<div className="bg-surface border border-border rounded-2xl p-8 sm:p-12 text-center shadow-lg">
 						{/* Animated Success Icon */}
-						<div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent animate-pulse">
+						<div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-linear-to-br from-primary to-accent animate-pulse">
 							<i className="fa-solid fa-circle-check text-surface text-4xl" />
 						</div>
 
 						{/* Success Message */}
-						<h1 className="text-2xl sm:text-3xl font-bold text-text mb-4">
-							Password Reset Successful!
-						</h1>
-						<p className="text-text-secondary mb-8 leading-relaxed">
-							Your password has been successfully reset. You can now use your new password to sign in to your FootballTalento account.
-						</p>
+						<h1 className="text-2xl sm:text-3xl font-bold text-text mb-4">Password Reset Successful!</h1>
+						<p className="text-text-secondary mb-8 leading-relaxed">Your password has been successfully reset. You can now use your new password to sign in to your FootballTalento account.</p>
 
 						{/* Security Reminder */}
 						<div className="bg-green-50 border border-green-200 rounded-lg p-5 mb-8 text-left">
@@ -105,26 +101,18 @@ function ResetPasswordContent() {
 								<i className="fa-solid fa-shield-halved text-green-600 mt-1" />
 								<div>
 									<h4 className="text-text font-semibold mb-1">Security Reminder</h4>
-									<p className="text-sm text-text-secondary">
-										Keep your password secure and don't share it with anyone. Enable two-factor authentication for added security.
-									</p>
+									<p className="text-sm text-text-secondary">Keep your password secure and don't share it with anyone. Enable two-factor authentication for added security.</p>
 								</div>
 							</div>
 						</div>
 
 						{/* Continue Button */}
-						<Link
-							href="/auth/login"
-							className="inline-block w-full bg-gradient-to-r from-primary to-accent text-surface font-semibold py-3.5 px-6 rounded-lg hover:shadow-lg hover:shadow-accent/20 transition-all duration-300 mb-4"
-						>
+						<Link href="/auth/login" className="inline-block w-full bg-linear-to-r from-primary to-accent text-surface font-semibold py-3.5 px-6 rounded-lg hover:shadow-lg hover:shadow-accent/20 transition-all duration-300 mb-4">
 							Continue to Login
 						</Link>
 
 						{/* Back to Home */}
-						<Link
-							href="/"
-							className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent transition-colors"
-						>
+						<Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent transition-colors">
 							<i className="fa-solid fa-arrow-left" />
 							<span>Back to Home</span>
 						</Link>
@@ -138,9 +126,7 @@ function ResetPasswordContent() {
 							</div>
 							<div>
 								<h3 className="font-semibold text-text mb-1">What's Next?</h3>
-								<p className="text-sm text-text-secondary mb-2">
-									Sign in with your new password and explore your FootballTalento dashboard.
-								</p>
+								<p className="text-sm text-text-secondary mb-2">Sign in with your new password and explore your FootballTalento dashboard.</p>
 								<ul className="text-sm text-text-secondary space-y-1">
 									<li>• Update your profile information</li>
 									<li>• Connect with the football community</li>

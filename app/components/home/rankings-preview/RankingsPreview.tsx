@@ -8,9 +8,9 @@ export default function RankingsPreview() {
 	const [activeTab, setActiveTab] = useState<"players" | "clubs">("players");
 
 	return (
-		<section id="rankings-preview" className="py-20 sm:py-24 bg-background">
+		<section id="rankings-preview" className="py-5 sm:py-10">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<header className="text-center mb-12">
+				<header className="text-center mb-5">
 					<h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-text mb-4">Global Rankings</h2>
 					<p className="text-sm sm:text-base md:text-lg text-text-secondary max-w-3xl mx-auto">Rankings based on verified match data, performance analytics, and scouting insights.</p>
 				</header>

@@ -64,7 +64,7 @@ export default function LoginPage() {
 	}
 
 	return (
-		<main className="min-h-screen bg-bg flex items-center justify-center px-4 pt-24 pb-16">
+		<main className="min-h-screen bg-bg flex items-center justify-center pt-16 sm:pt-18.25">
 			<section className="w-full max-w-md sm:max-w-lg">
 				<div className="bg-surface border border-border rounded-2xl shadow-xl p-8 sm:p-10">
 					{/* Header */}
@@ -90,16 +90,7 @@ export default function LoginPage() {
 									<i className="fa-regular fa-user" />
 								</span>
 
-								<input 
-									id="identifier" 
-									name="identifier" 
-									type="text" 
-									required 
-									value={emailUsername}
-									onChange={(e) => setEmailUsername(e.target.value)}
-									placeholder="Enter your email or username" 
-									className="w-full rounded-lg border border-border bg-surface px-4 py-3.5 pl-12 text-text placeholder:text-text-muted focus:outline-none focus:ring-primary/20 focus:border-primary" 
-								/>
+								<input id="identifier" name="identifier" type="text" required value={emailUsername} onChange={(e) => setEmailUsername(e.target.value)} placeholder="Enter your email or username" className="w-full rounded-lg border border-border bg-surface px-4 py-3.5 pl-12 text-text placeholder:text-text-muted focus:outline-none focus:ring-primary/20 focus:border-primary" />
 							</div>
 						</div>
 
@@ -114,23 +105,9 @@ export default function LoginPage() {
 									<i className="fa-solid fa-lock" />
 								</span>
 
-								<input 
-									id="password" 
-									name="password" 
-									type={showPassword ? "text" : "password"} 
-									required 
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
-									placeholder="Enter your password" 
-									className="w-full rounded-lg border border-border bg-surface px-4 py-3.5 pl-12 pr-12 text-text placeholder:text-text-muted focus:outline-none focus:ring-primary/20 focus:border-primary" 
-								/>
+								<input id="password" name="password" type={showPassword ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" className="w-full rounded-lg border border-border bg-surface px-4 py-3.5 pl-12 pr-12 text-text placeholder:text-text-muted focus:outline-none focus:ring-primary/20 focus:border-primary" />
 
-								<button 
-									type="button" 
-									onClick={() => setShowPassword(!showPassword)} 
-									className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text" 
-									aria-label="Toggle password visibility"
-								>
+								<button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text" aria-label="Toggle password visibility">
 									<i className={`fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`} />
 								</button>
 							</div>
@@ -139,13 +116,7 @@ export default function LoginPage() {
 						{/* Remember + Forgot */}
 						<div className="flex items-center justify-between gap-4 flex-wrap">
 							<label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
-								<input 
-									type="checkbox" 
-									name="remember" 
-									checked={remember}
-									onChange={(e) => setRemember(e.target.checked)}
-									className="h-4 w-4 accent-primary border-border rounded" 
-								/>
+								<input type="checkbox" name="remember" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="h-4 w-4 accent-primary border-border rounded" />
 								Remember me
 							</label>
 
@@ -155,11 +126,7 @@ export default function LoginPage() {
 						</div>
 
 						{/* Submit */}
-						<button 
-							type="submit" 
-							disabled={isSubmitting} 
-							className="w-full rounded-lg bg-primary py-3.5 font-semibold text-white transition hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-						>
+						<button type="submit" disabled={isSubmitting} className="w-full rounded-lg bg-primary py-3.5 font-semibold text-white transition hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
 							{isSubmitting ? (
 								<>
 									<i className="fa-solid fa-spinner fa-spin" />

@@ -6,7 +6,7 @@ type Player = {
 	age: number;
 	position: string;
 	country: string;
-	score: number;
+	club: string;
 	image: string;
 };
 
@@ -17,7 +17,7 @@ const players: Player[] = [
 		age: 20,
 		position: "Midfielder",
 		country: "England",
-		score: 96,
+		club: "Real Madrid",
 		image: "/images/players-images/Jude Bellingham.webp",
 	},
 	{
@@ -26,7 +26,7 @@ const players: Player[] = [
 		age: 21,
 		position: "Attacking Midfielder",
 		country: "Germany",
-		score: 95,
+		club: "Bayern Munich",
 		image: "/images/players-images/Jamal Musiala.jpg",
 	},
 	{
@@ -35,7 +35,7 @@ const players: Player[] = [
 		age: 21,
 		position: "Midfielder",
 		country: "Spain",
-		score: 94,
+		club: "FC Barcelona",
 		image: "/images/players-images/Pedri.webp",
 	},
 	{
@@ -44,7 +44,7 @@ const players: Player[] = [
 		age: 20,
 		position: "Central Midfielder",
 		country: "Spain",
-		score: 93,
+		club: "FC Barcelona",
 		image: "/images/players-images/Gavi.jpg",
 	},
 	{
@@ -53,7 +53,7 @@ const players: Player[] = [
 		age: 22,
 		position: "Winger",
 		country: "England",
-		score: 92,
+		club: "Arsenal FC",
 		image: "/images/players-images/Bukayo Saka.webp",
 	},
 	{
@@ -62,7 +62,7 @@ const players: Player[] = [
 		age: 21,
 		position: "Attacking Midfielder",
 		country: "Germany",
-		score: 91,
+		club: "Bayer Leverkusen",
 		image: "/images/players-images/Florian Wirtz.webp",
 	},
 ];
@@ -71,49 +71,41 @@ export default function PlayersRankings() {
 	return (
 		<div className="space-y-3">
 			{players.map((player, index) => (
-				<div
-					key={player.id}
-					className="
-						flex
-						flex-col
-						lg:flex-row
-						lg:items-center
-						lg:justify-between
-						gap-4
-						bg-background
-						border border-border
-						rounded-xl
-						p-4 sm:p-6
-						hover:shadow-sm
-						transition
-					"
-				>
-					{/* Left section */}
-					<div className="flex items-center gap-4">
-						<div className="w-8 text-xl font-black text-primary">{index + 1}</div>
+				<div key={player.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-bg border border-border rounded-xl p-4 hover:shadow-sm transition">
+					<div className="flex items-center gap-4 min-w-0">
+						<div className="hidden sm:block w-8 text-xl font-black text-primary shrink-0">{index + 1}</div>
 
-						<div className="w-14 h-14 rounded-full overflow-hidden bg-border">
+						<div className="w-14 h-14 rounded-full overflow-hidden bg-border shrink-0">
 							<Image src={player.image} alt={player.name} width={56} height={56} className="object-cover w-full h-full" />
 						</div>
 
-						<div>
-							<div className="font-semibold text-text">{player.name}</div>
+						<div className="min-w-0">
+							<div className="font-semibold text-text truncate">{player.name}</div>
 							<div className="text-sm text-text-secondary">
 								{player.position} • {player.age} years
 							</div>
 						</div>
 					</div>
 
-					{/* Right meta section */}
-					<div className="flex justify-between lg:justify-end gap-6 text-center">
-						<div>
-							<div className="text-xs text-text-muted mb-1">Country</div>
-							<div className="font-medium text-text">{player.country}</div>
+					<div className="hidden sm:flex flex-col items-end text-sm gap-1 text-text-secondary">
+						<div className="flex items-center gap-2">
+							<i className="fa-solid fa-location-dot text-primary text-xs" />
+							<span>{player.country}</span>
 						</div>
+						<div className="flex items-center gap-2">
+							<i className="fa-solid fa-shield-halved text-primary text-xs" />
+							<span>{player.club}</span>
+						</div>
+					</div>
 
-						<div>
-							<div className="text-xs text-text-muted mb-1">PlayerScore</div>
-							<div className="text-2xl font-black text-primary">{player.score}</div>
+					<div className="sm:hidden pt-3 border-t border-border flex items-center justify-between text-sm text-text-secondary">
+						<div className="flex items-center gap-2">
+							<i className="fa-solid fa-location-dot text-primary text-xs" />
+							<span>{player.country}</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<i className="fa-solid fa-shield-halved text-primary text-xs" />
+							<span>{player.club}</span>
 						</div>
 					</div>
 				</div>

@@ -9,8 +9,8 @@ import Testimonials from "./components/home/Testimonials";
 export default function HomePage() {
 	return (
 		<>
-			<main className="pt-20">
-			    <HeroSection />
+			<main className="mt-16 sm:mt-18.25">
+                <HeroSection />
                 <FeaturedPlayersSection />
                 <StoriesHighlightsSection />
                 <HowItWorksSection />

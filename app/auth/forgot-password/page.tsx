@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
 	}
 
 	return (
-		<main className="min-h-screen bg-bg flex items-center justify-center px-4 pt-24 pb-16">
+		<main className="min-h-screen bg-bg flex items-center justify-center pt-16 sm:pt-18.25">
 			<section className="w-full max-w-xl">
 				{/* Card */}
 				<div className="bg-surface border border-border rounded-2xl p-8 sm:p-10 shadow-lg">
@@ -60,7 +60,7 @@ export default function ForgotPasswordPage() {
 							</div>
 						</div>
 					)}
-                    
+
 					{/* Form */}
 					<form onSubmit={handleSubmit} className="space-y-6">
 						{/* Email */}
@@ -74,34 +74,18 @@ export default function ForgotPasswordPage() {
 									<i className="fa-solid fa-envelope" />
 								</span>
 
-								<input 
-									id="email" 
-									name="email" 
-									type="email" 
-									required 
-									value={email}
-									onChange={(e) => setEmail(e.target.value)}
-									disabled={emailSent}
-									placeholder="your.email@example.com" 
-									className="w-full rounded-lg border border-border bg-surface px-4 py-3 pl-12 text-text placeholder:text-text-muted focus:outline-none focus:ring-accent/30 focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed"
-								/>
+								<input id="email" name="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={emailSent} placeholder="your.email@example.com" className="w-full rounded-lg border border-border bg-surface px-4 py-3 pl-12 text-text placeholder:text-text-muted focus:outline-none focus:ring-accent/30 focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed" />
 							</div>
 						</div>
 
 						{/* Info Box */}
 						<div className="flex items-start gap-3 rounded-lg border border-border bg-bg p-4">
 							<i className="fa-solid fa-circle-info text-accent mt-0.5" />
-							<p className="text-sm text-text-secondary">
-								We&apos;ll send you a reset link to your registered email address. Please check your inbox and spam folder.
-							</p>
+							<p className="text-sm text-text-secondary">We&apos;ll send you a reset link to your registered email address. Please check your inbox and spam folder.</p>
 						</div>
 
 						{/* Submit */}
-						<button 
-							type="submit" 
-							disabled={isSubmitting || emailSent} 
-							className="w-full rounded-lg bg-accent py-3.5 font-semibold text-white transition hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-						>
+						<button type="submit" disabled={isSubmitting || emailSent} className="w-full rounded-lg bg-accent py-3.5 font-semibold text-white transition hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed">
 							{isSubmitting ? (
 								<span className="flex items-center justify-center gap-2">
 									<i className="fa-solid fa-spinner fa-spin" />
@@ -148,9 +132,7 @@ export default function ForgotPasswordPage() {
 						</div>
 						<div>
 							<h3 className="font-semibold text-text mb-1">Security Tip</h3>
-							<p className="text-sm text-text-secondary">
-								Never share your password reset link with anyone. Our team will never ask for your password.
-							</p>
+							<p className="text-sm text-text-secondary">Never share your password reset link with anyone. Our team will never ask for your password.</p>
 						</div>
 					</div>
 				</div>

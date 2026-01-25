@@ -66,10 +66,10 @@ export default function StoriesHighlightsSection() {
 	};
 
 	return (
-		<section id="stories-highlights" className="py-16 sm:py-20 lg:py-24 bg-bg">
+		<section id="stories-highlights" className="py-5 sm:py-10">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				{/* Header */}
-				<div className="mb-10 sm:mb-12">
+				<div className="mb-5">
 					<h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-text mb-3">Stories & Highlights</h2>
 					<p className="text-base sm:text-lg text-text-secondary">Watch the latest player performances and training sessions</p>
 				</div>
