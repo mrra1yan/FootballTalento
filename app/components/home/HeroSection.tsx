@@ -2,55 +2,76 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-
-const slides = [
-	{
-		id: 1,
-		image: "/images/Hero Image 1.png",
-		title: "Discover Football Talent.",
-		highlight: ["Verified.", "Ranked.", "Global."],
-		description: "A global platform where players showcase skills and get discovered by clubs and scouts worldwide.",
-	},
-	{
-		id: 2,
-		image: "/images/Hero Image 2.jpg",
-		title: "Find the Next Generation.",
-		highlight: ["Trusted.", "Data-Driven.", "Worldwide."],
-		description: "Clubs and academies access verified player profiles, rankings, and performance insights.",
-	},
-	{
-		id: 3,
-		image: "/images/Hero Image 3.webp",
-		title: "Scout Smarter.",
-		highlight: ["Verified.", "Transparent.", "Efficient."],
-		description: "Professional scouts discover talent faster with real performance data and video analysis.",
-	},
-];
+import { useTranslation } from "@/lib/i18n";
+import { getHomeContent, type HomeContent } from "@/lib/api/content";
 
 export default function HeroSection() {
+	const { t, language } = useTranslation();
+	const [slides, setSlides] = useState<HomeContent['slides']>([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchContent = async () => {
+			try {
+				const data = await getHomeContent(language);
+				if (data.slides && data.slides.length > 0) {
+					setSlides(data.slides);
+				}
+			} catch (error) {
+				console.error("Failed to load hero slides:", error);
+			} finally {
+				setLoading(false);
+			}
+		};
+		fetchContent();
+	}, [language]);
+
 	const [active, setActive] = useState(0);
-    const [isPaused, setIsPaused] = useState(false);
-    
-    const handleNext = () => {
-		setActive((prev) => (prev + 1) % slides.length);
+	const [isPaused, setIsPaused] = useState(false);
+
+	// Fallback slides if none returned from API
+	const effectiveSlides = slides.length > 0 ? slides : [
+		{
+			id: 1,
+			image: "/images/Hero Image 1.png",
+			title: t('hero_title_1'),
+			badges: [t('hero_badge_verified'), t('hero_badge_global'), t('hero_badge_youth')],
+			description: t('hero_desc_1'),
+			highlights: [t('hero_badge_verified'), t('hero_badge_global'), t('hero_badge_youth')],
+			cta1: { text: t('hero_cta_create'), link: '/auth/register' },
+			cta2: { text: t('hero_cta_explore'), link: '/#players' }
+		},
+		{
+			id: 2,
+			image: "/images/Hero Image 2.jpg",
+			title: t('hero_title_2'),
+			badges: [t('hero_badge_verified'), t('hero_badge_global'), t('hero_badge_youth')],
+			description: t('hero_desc_2'),
+			highlights: [t('hero_badge_verified'), t('hero_badge_global'), t('hero_badge_youth')],
+			cta1: { text: t('hero_cta_create'), link: '/auth/register' },
+			cta2: { text: t('hero_cta_explore'), link: '/#players' }
+		}
+	];
+
+	const totalSlides = effectiveSlides.length;
+
+	const handleNext = () => {
+		setActive((prev) => (prev + 1) % totalSlides);
 	};
 
 	const handlePrev = () => {
-		setActive((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+		setActive((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
 	};
 
-
-
-	
 	useEffect(() => {
-		if (isPaused) return;
+		if (isPaused || totalSlides <= 1) return;
 
 		const interval = setInterval(() => {
-			setActive((prev) => (prev + 1) % slides.length);
+			setActive((prev) => (prev + 1) % totalSlides);
 		}, 7000);
 
 		return () => clearInterval(interval);
-	}, [isPaused, slides.length]);
+	}, [isPaused, totalSlides]);
 
 	useEffect(() => {
 		if (!isPaused) return;
@@ -62,16 +83,14 @@ export default function HeroSection() {
 		return () => clearTimeout(resumeTimer);
 	}, [isPaused]);
 
-
-
-	const slide = slides[active];
+	const slide = effectiveSlides[active];
 
 	return (
 		<section className="relative overflow-hidden bg-black">
 			<div className="absolute inset-0">
-				{slides.map((s, i) => (
+				{effectiveSlides.map((s, i) => (
 					<div key={s.id} className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${i === active ? "opacity-100" : "opacity-0"}`}>
-						<Image src={s.image} alt={s.title} fill sizes="100vw" priority={i === 0} className="object-cover scale-105" />
+						{s.image && <Image src={s.image} alt={s.title} fill sizes="100vw" priority={i === 0} className="object-cover scale-105" />}
 					</div>
 				))}
 				<div className="absolute inset-0 bg-black/80" />
@@ -96,7 +115,7 @@ export default function HeroSection() {
 				</button>
 
 				<div className="flex gap-3 sm:flex-col">
-					{slides.map((_, i) => (
+					{effectiveSlides.map((_, i) => (
 						<button
 							key={i}
 							onClick={() => {
@@ -126,18 +145,18 @@ export default function HeroSection() {
 					<div key={slide.id} className="max-w-xl lg:max-w-4xl animate-slide-up">
 						{/* Badges */}
 						<div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
-							<Badge icon="fa-shield-halved" text="Verified Platform" />
-							<Badge icon="fa-globe" text="Global Network" />
-							<Badge icon="fa-child-reaching" text="Youth Safe" />
+							{slide.badges?.map((badge, idx) => (
+								<Badge key={idx} icon={idx === 0 ? "fa-shield-halved" : idx === 1 ? "fa-globe" : "fa-child-reaching"} text={badge} />
+							))}
 						</div>
 
 						{/* Heading */}
 						<h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-4 sm:mb-6">
 							{slide.title}
 							<br />
-							<span className="text-accent mr-2">{slide.highlight[0]}</span>
-							<span className="text-secondary mr-2">{slide.highlight[1]}</span>
-							<span>{slide.highlight[2]}</span>
+							{slide.highlights?.map((hl, idx) => (
+								<span key={idx} className={`${idx === 0 ? "text-accent" : idx === 1 ? "text-secondary" : ""} mr-2`}>{hl}</span>
+							))}
 						</h1>
 
 						{/* Description */}
@@ -145,21 +164,25 @@ export default function HeroSection() {
 
 						{/* CTA */}
 						<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12">
-							<button className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-accent text-white font-bold hover:opacity-90 transition">
-								<i className="fa-solid fa-user-plus mr-2" />
-								Create Player Profile
-							</button>
-							<button className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition">
-								<i className="fa-solid fa-compass mr-2" />
-								Explore Players
-							</button>
+							{slide.cta1?.text && (
+								<a href={slide.cta1.link} className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-accent text-white font-bold hover:opacity-90 transition flex items-center justify-center">
+									<i className="fa-solid fa-user-plus mr-2" />
+									{slide.cta1.text}
+								</a>
+							)}
+							{slide.cta2?.text && (
+								<a href={slide.cta2.link} className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition flex items-center justify-center">
+									<i className="fa-solid fa-compass mr-2" />
+									{slide.cta2.text}
+								</a>
+							)}
 						</div>
 
 						{/* Trust Grid */}
 						<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-2xl">
-							<TrustItem icon="fa-certificate" title="Verified Profiles" value="100% Secure" />
-							<TrustItem icon="fa-ranking-star" title="Global Rankings" value="Live Updates" />
-							<TrustItem icon="fa-shield-heart" title="Youth Protection" value="Parent Control" />
+							<TrustItem icon="fa-certificate" title={t('trust_profiles')} value={t('trust_profiles_val')} />
+							<TrustItem icon="fa-ranking-star" title={t('trust_rankings')} value={t('trust_rankings_val')} />
+							<TrustItem icon="fa-shield-heart" title={t('trust_youth')} value={t('trust_youth_val')} />
 						</div>
 					</div>
 				</div>

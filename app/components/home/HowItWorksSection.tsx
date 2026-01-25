@@ -1,22 +1,28 @@
+"use client";
+
+import { useTranslation } from "@/lib/i18n";
+
 export default function HowItWorksSection() {
+	const { t } = useTranslation();
+
 	const steps = [
 		{
 			id: "01",
 			icon: "fa-user-plus",
-			title: "Create Profile",
-			description: "Sign up in minutes and build your comprehensive player profile. Add your personal info, position, stats, and achievements. Parents can create and manage profiles for minors with full control.",
+			title: t('step_1_title'),
+			description: t('step_1_desc'),
 		},
 		{
 			id: "02",
 			icon: "fa-magnifying-glass",
-			title: "Upload Videos & Get Evaluated",
-			description: "Share your best game footage, training videos, and skill highlights. Our AI-powered evaluation system analyzes your performance and generates your PlayerScore based on technical skills, physical attributes, and game intelligence.",
+			title: t('step_2_title'),
+			description: t('step_2_desc'),
 		},
 		{
 			id: "03",
 			icon: "fa-comments",
-			title: "Get Discovered",
-			description: "Verified clubs, academies, and professional scouts browse our rankings and discover talent. Get direct contact from opportunities worldwide. Track your progress and watch your career take off.",
+			title: t('step_3_title'),
+			description: t('step_3_desc'),
 		},
 	];
 
@@ -25,9 +31,9 @@ export default function HowItWorksSection() {
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mx-auto mb-8">
-					<h2 className="text-2xl sm:text-3xl lg:text-5xl font-black text-text mb-3 sm:mb-4">How FootballTalento Works</h2>
+					<h2 className="text-2xl sm:text-3xl lg:text-5xl font-black text-text mb-3 sm:mb-4">{t('how_it_works_title')}</h2>
 
-					<p className="text-sm sm:text-base lg:text-lg text-text-secondary">From creating your profile to growing your sports career, we’ve made every step simple and effective.</p>
+					<p className="text-sm sm:text-base lg:text-lg text-text-secondary">{t('how_it_works_desc')}</p>
 				</div>
 
 				{/* Steps */}

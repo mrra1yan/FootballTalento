@@ -4,25 +4,33 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
+import { useLanguageStore, useTranslation, type Language } from "@/lib/i18n";
 import toast from "react-hot-toast";
 
-const LANGUAGES = ["EN", "FR", "AR"] as const;
-const CURRENCIES = ["USD", "EUR", "GBP"] as const;
-
-type Language = (typeof LANGUAGES)[number];
+const LANGUAGES: { code: Language; label: string; flag: string }[] = [
+	{ code: 'en', label: 'English', flag: '🇬🇧' },
+	{ code: 'ar', label: 'العربية', flag: '🇸🇦' },
+	{ code: 'fr', label: 'Français', flag: '🇫🇷' },
+	{ code: 'it', label: 'Italiano', flag: '🇮🇹' },
+	{ code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+	{ code: 'es', label: 'Español', flag: '🇪🇸' },
+	{ code: 'pt', label: 'Português', flag: '🇵🇹' },
+	{ code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+];
+const CURRENCIES = ["USD", "EUR", "MAD", "AED", "TRY", "CHF"] as const;
 type Currency = (typeof CURRENCIES)[number];
 
 export default function Header() {
 	const router = useRouter();
 	const { user, isAuthenticated, logout } = useAuthStore();
-	
+
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [langOpen, setLangOpen] = useState(false);
 	const [currencyOpen, setCurrencyOpen] = useState(false);
 	const [userMenuOpen, setUserMenuOpen] = useState(false);
 
-	const [language, setLanguage] = useState<Language>("EN");
-	const [currency, setCurrency] = useState<Currency>("USD");
+	const { setLanguage, currency, setCurrency } = useLanguageStore();
+	const { t, language } = useTranslation();
 
 	const langRef = useRef<HTMLDivElement>(null);
 	const currencyRef = useRef<HTMLDivElement>(null);
@@ -72,16 +80,16 @@ export default function Header() {
 					{/* Desktop Navigation */}
 					<nav className="hidden lg:flex items-center gap-6 xl:gap-8">
 						<Link href="/#players" className="text-surface/80 hover:text-surface">
-							Explore Players
+							{t('explore_players')}
 						</Link>
 						<Link href="/#rankings" className="text-surface/80 hover:text-surface">
-							Rankings
+							{t('rankings')}
 						</Link>
 						<Link href="/#stories" className="text-surface/80 hover:text-surface">
-							Stories
+							{t('stories')}
 						</Link>
 						<Link href="/#how-it-works" className="text-surface/80 hover:text-surface">
-							How It Works
+							{t('how_it_works')}
 						</Link>
 					</nav>
 
@@ -89,9 +97,9 @@ export default function Header() {
 					<div className="hidden lg:flex items-center gap-3 xl:gap-4">
 						{/* Language */}
 						<div ref={langRef} className="relative">
-							<button 
+							<button
 								onClick={() => {
-									setLangOpen(!langOpen); 
+									setLangOpen(!langOpen);
 									setCurrencyOpen(false);
 									setUserMenuOpen(false);
 								}}
@@ -103,21 +111,21 @@ export default function Header() {
 							</button>
 
 							{langOpen && (
-								<div className="absolute right-0 mt-2 w-32 bg-surface border border-border rounded-lg shadow-sm overflow-hidden">
+								<div className="absolute right-0 mt-2 w-48 bg-surface border border-border rounded-lg shadow-lg overflow-hidden py-1">
 									{LANGUAGES.map((l) => (
-										<button 
-											key={l} 
-											onClick={() => { 
-												setLanguage(l); 
+										<button
+											key={l.code}
+											onClick={() => {
+												setLanguage(l.code);
 												setLangOpen(false);
 											}}
-											className={`block w-full text-left px-3 py-2 text-sm ${
-												l === language 
-													? "bg-primary text-surface" 
-													: "text-text-secondary hover:bg-primary hover:text-surface"
-											}`}
+											className={`flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm transition ${l.code === language
+												? "bg-primary text-surface"
+												: "text-text-secondary hover:bg-primary hover:text-surface"
+												}`}
 										>
-											{l}
+											<span>{l.flag}</span>
+											<span className="font-medium">{l.label}</span>
 										</button>
 									))}
 								</div>
@@ -148,11 +156,10 @@ export default function Header() {
 												setCurrency(c);
 												setCurrencyOpen(false);
 											}}
-											className={`block w-full text-left px-3 py-2 text-sm ${
-												c === currency 
-													? "bg-primary text-surface" 
-													: "text-text-secondary hover:bg-primary hover:text-surface"
-											}`}
+											className={`block w-full text-left px-3 py-2 text-sm ${c === currency
+												? "bg-primary text-surface"
+												: "text-text-secondary hover:bg-primary hover:text-surface"
+												}`}
 										>
 											{c}
 										</button>
@@ -208,7 +215,7 @@ export default function Header() {
 													onClick={() => setUserMenuOpen(false)}
 												>
 													<i className="fas fa-gauge w-4 text-primary" />
-													<span className="text-sm">Dashboard</span>
+													<span className="text-sm">{t('dashboard')}</span>
 												</Link>
 												<Link
 													href="/profile"
@@ -216,7 +223,7 @@ export default function Header() {
 													onClick={() => setUserMenuOpen(false)}
 												>
 													<i className="fas fa-user w-4 text-primary" />
-													<span className="text-sm">Profile</span>
+													<span className="text-sm">{t('profile')}</span>
 												</Link>
 												<Link
 													href="/settings"
@@ -224,7 +231,7 @@ export default function Header() {
 													onClick={() => setUserMenuOpen(false)}
 												>
 													<i className="fas fa-cog w-4 text-primary" />
-													<span className="text-sm">Settings</span>
+													<span className="text-sm">{t('settings')}</span>
 												</Link>
 											</div>
 
@@ -235,7 +242,7 @@ export default function Header() {
 													className="w-full flex items-center gap-3 px-4 py-2.5 text-red-500 hover:bg-red-50"
 												>
 													<i className="fas fa-sign-out w-4" />
-													<span className="text-sm font-medium">Logout</span>
+													<span className="text-sm font-medium">{t('logout')}</span>
 												</button>
 											</div>
 										</div>
@@ -245,27 +252,27 @@ export default function Header() {
 						) : (
 							<>
 								{/* Login & Register - Show when NOT logged in */}
-								<Link 
-									href="/auth/login" 
+								<Link
+									href="/auth/login"
 									className="text-surface/80 hover:text-surface"
 								>
-									Login
+									{t('login')}
 								</Link>
 
-								<Link 
-									href="/auth/register" 
+								<Link
+									href="/auth/register"
 									className="px-4 py-2 bg-surface text-primary rounded-lg hover:bg-surface/90"
 								>
-									Register
+									{t('signup')}
 								</Link>
 							</>
 						)}
 					</div>
 
 					{/* Mobile Menu Button */}
-					<button 
-						onClick={() => setMenuOpen(!menuOpen)} 
-						className="lg:hidden w-10 h-10 flex items-center justify-center text-surface" 
+					<button
+						onClick={() => setMenuOpen(!menuOpen)}
+						className="lg:hidden w-10 h-10 flex items-center justify-center text-surface"
 						aria-label="Toggle menu"
 					>
 						<i className={`fas ${menuOpen ? "fa-times" : "fa-bars"} text-xl`} />
@@ -277,63 +284,64 @@ export default function Header() {
 			{menuOpen && (
 				<nav className="lg:hidden bg-surface border-t border-border">
 					<div className="px-4 sm:px-6 py-5 space-y-4">
-						<Link 
-							href="/#players" 
+						<Link
+							href="/#players"
 							className="block text-text font-medium"
 							onClick={() => setMenuOpen(false)}
 						>
-							Explore Players
+							{t('explore_players')}
 						</Link>
-						<Link 
-							href="/#rankings" 
+						<Link
+							href="/#rankings"
 							className="block text-text font-medium"
 							onClick={() => setMenuOpen(false)}
 						>
-							Rankings
+							{t('rankings')}
 						</Link>
-						<Link 
-							href="/#stories" 
+						<Link
+							href="/#stories"
 							className="block text-text font-medium"
 							onClick={() => setMenuOpen(false)}
 						>
-							Stories
+							{t('stories')}
 						</Link>
-						<Link 
-							href="/#how-it-works" 
+						<Link
+							href="/#how-it-works"
 							className="block text-text font-medium"
 							onClick={() => setMenuOpen(false)}
 						>
-							How It Works
+							{t('how_it_works')}
 						</Link>
 
-						{/* Language */}
-						<div className="pt-4 border-t border-border flex flex-wrap gap-2">
-							{LANGUAGES.map((l) => (
-								<button 
-									key={l} 
-									onClick={() => setLanguage(l)} 
-									className={`px-3 py-2 rounded-lg border text-sm ${
-										l === language 
-											? "bg-primary text-surface border-primary" 
-											: "border-border text-text-secondary"
-									}`}
-								>
-									{l}
-								</button>
-							))}
+						<div className="pt-4 border-t border-border">
+							<p className="text-xs font-semibold text-text-muted uppercase mb-3 px-1">{t('select_language')}</p>
+							<div className="grid grid-cols-2 gap-2">
+								{LANGUAGES.map((l) => (
+									<button
+										key={l.code}
+										onClick={() => setLanguage(l.code)}
+										className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-sm transition ${l.code === language
+											? "bg-primary text-surface border-primary"
+											: "border-border text-text-secondary bg-white shadow-sm"
+											}`}
+									>
+										<span>{l.flag}</span>
+										<span className="font-medium">{l.label}</span>
+									</button>
+								))}
+							</div>
 						</div>
 
 						{/* Currency */}
 						<div className="flex flex-wrap gap-2">
 							{CURRENCIES.map((c) => (
-								<button 
-									key={c} 
-									onClick={() => setCurrency(c)} 
-									className={`px-3 py-2 rounded-lg border text-sm ${
-										c === currency 
-											? "bg-primary text-surface border-primary" 
-											: "border-border text-text-secondary"
-									}`}
+								<button
+									key={c}
+									onClick={() => setCurrency(c)}
+									className={`px-3 py-2 rounded-lg border text-sm ${c === currency
+										? "bg-primary text-surface border-primary"
+										: "border-border text-text-secondary"
+										}`}
 								>
 									{c}
 								</button>
@@ -369,7 +377,7 @@ export default function Header() {
 											onClick={() => setMenuOpen(false)}
 										>
 											<i className="fas fa-gauge w-4" />
-											<span className="text-sm">Dashboard</span>
+											<span className="text-sm">{t('dashboard')}</span>
 										</Link>
 										<Link
 											href="/profile"
@@ -377,7 +385,7 @@ export default function Header() {
 											onClick={() => setMenuOpen(false)}
 										>
 											<i className="fas fa-user w-4" />
-											<span className="text-sm">Profile</span>
+											<span className="text-sm">{t('profile')}</span>
 										</Link>
 										<Link
 											href="/settings"
@@ -385,7 +393,7 @@ export default function Header() {
 											onClick={() => setMenuOpen(false)}
 										>
 											<i className="fas fa-cog w-4" />
-											<span className="text-sm">Settings</span>
+											<span className="text-sm">{t('settings')}</span>
 										</Link>
 									</div>
 
@@ -395,7 +403,7 @@ export default function Header() {
 										className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-red-500 text-white hover:bg-red-600"
 									>
 										<i className="fas fa-sign-out" />
-										<span className="font-medium">Logout</span>
+										<span className="font-medium">{t('logout')}</span>
 									</button>
 								</div>
 							</>
@@ -403,19 +411,19 @@ export default function Header() {
 							<>
 								{/* Mobile Login & Register - Show when NOT logged in */}
 								<div className="pt-4 border-t border-border flex gap-3">
-									<Link 
-										href="/auth/login" 
+									<Link
+										href="/auth/login"
 										className="flex-1 text-center py-2 rounded-lg border border-primary text-primary hover:bg-primary hover:text-surface"
 										onClick={() => setMenuOpen(false)}
 									>
-										Sign In
+										{t('signin')}
 									</Link>
-									<Link 
-										href="/auth/register" 
+									<Link
+										href="/auth/register"
 										className="flex-1 text-center py-2 rounded-lg bg-primary text-surface hover:bg-secondary"
 										onClick={() => setMenuOpen(false)}
 									>
-										Register
+										{t('signup')}
 									</Link>
 								</div>
 							</>

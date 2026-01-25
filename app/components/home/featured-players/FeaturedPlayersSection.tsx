@@ -1,6 +1,7 @@
 "use client";
 
 import PlayerCard from "./PlayerCard";
+import { useTranslation } from "@/lib/i18n";
 
 const players = [
 	{
@@ -73,18 +74,19 @@ const players = [
 
 
 export default function FeaturedPlayersSection() {
+	const { t } = useTranslation();
 	return (
 		<section id="featured-players" className="pt-10 pb-6 sm:pt-16 sm:pb-8 lg:pt-16 lg:pb-10">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between mb-5">
 					<div>
-						<h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-text mb-2">Top Rising Players</h2>
-						<p className="text-text-secondary text-sm sm:text-base lg:text-lg">Discover the next generation of football stars</p>
+						<h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-text mb-2">{t('featured_players')}</h2>
+						<p className="text-text-secondary text-sm sm:text-base lg:text-lg">{t('featured_players_desc')}</p>
 					</div>
 
 					<button className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-border bg-accent text-white font-semibold hover:bg-primary hover:text-white transition">
-						View Full Rankings
+						{t('view_full_rankings')}
 						<i className="fa-solid fa-arrow-right text-sm" />
 					</button>
 				</div>

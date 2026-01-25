@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useTranslation } from "@/lib/i18n";
 
 type Club = {
 	id: number;
@@ -37,6 +38,7 @@ const clubs: Club[] = [
 ];
 
 export default function ClubsRankings() {
+	const { t } = useTranslation();
 	return (
 		<div className="space-y-3">
 			{clubs.map((club) => (
@@ -55,12 +57,12 @@ export default function ClubsRankings() {
 					</div>
 
 					<div className="hidden sm:block text-right">
-						<div className="text-xs text-text-muted mb-1">ClubScore</div>
+						<div className="text-xs text-text-muted mb-1">{t('club_score')}</div>
 						<div className="text-2xl font-black text-primary">{club.score}</div>
 					</div>
 
 					<div className="sm:hidden pt-3 border-t border-border flex items-center justify-between text-sm">
-						<span className="text-text-secondary">ClubScore</span>
+						<span className="text-text-secondary">{t('club_score')}</span>
 						<span className="text-xl font-black text-primary">{club.score}</span>
 					</div>
 				</div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { useTranslation } from "@/lib/i18n";
 
 type Story = {
 	id: number;
@@ -12,6 +13,7 @@ type Story = {
 };
 
 export default function StoriesHighlightsSection() {
+	const { t } = useTranslation();
 	const containerRef = useRef<HTMLDivElement | null>(null);
 
 	const isDown = useRef(false);
@@ -70,8 +72,8 @@ export default function StoriesHighlightsSection() {
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-5">
-					<h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-text mb-3">Stories & Highlights</h2>
-					<p className="text-base sm:text-lg text-text-secondary">Watch the latest player performances and training sessions</p>
+					<h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-text mb-3">{t('stories_highlights')}</h2>
+					<p className="text-base sm:text-lg text-text-secondary">{t('stories_highlights_desc')}</p>
 				</div>
 
 				{/* Stories Row */}

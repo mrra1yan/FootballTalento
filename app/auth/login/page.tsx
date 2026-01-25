@@ -7,20 +7,23 @@ import toast from "react-hot-toast";
 import { login as loginUser } from "@/lib/api/auth";
 import { useAuthStore } from "@/store/authStore";
 import type { ApiError } from "@/types/auth";
+import { useTranslation } from "@/lib/i18n";
 
 export default function LoginPage() {
 	const router = useRouter();
 	const { setUser, setIsAuthenticated } = useAuthStore();
-	
+	const { t } = useTranslation();
+
 	const [emailUsername, setEmailUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [remember, setRemember] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [website_url, setWebsiteUrl] = useState(""); // Honeypot field
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		
+
 		if (!emailUsername || !password) {
 			toast.error("Please enter your credentials");
 			return;
@@ -33,6 +36,7 @@ export default function LoginPage() {
 				emailUsername,
 				password,
 				remember,
+				website_url,
 			});
 
 			if (response.success && response.data) {
@@ -49,7 +53,7 @@ export default function LoginPage() {
 				setIsAuthenticated(true);
 
 				toast.success(`Welcome back, ${response.data.display_name}!`);
-				
+
 				// Redirect to dashboard
 				setTimeout(() => {
 					router.push("/dashboard");
@@ -73,16 +77,27 @@ export default function LoginPage() {
 							<i className="fa-solid fa-futbol text-white text-2xl" />
 						</div>
 
-						<h1 className="text-2xl sm:text-3xl font-bold text-text">Welcome Back</h1>
-						<p className="mt-2 text-sm text-text-secondary">Log in to manage your football journey</p>
+						<h1 className="text-2xl sm:text-3xl font-bold text-text">{t('welcome_back')}</h1>
+						<p className="mt-2 text-sm text-text-secondary">{t('login_subtitle')}</p>
 					</header>
 
 					{/* Form */}
 					<form onSubmit={handleSubmit} className="space-y-6">
+						{/* Honeypot Field - Hidden from users */}
+						<div className="hidden" aria-hidden="true">
+							<input
+								type="text"
+								name="website_url"
+								value={website_url}
+								onChange={(e) => setWebsiteUrl(e.target.value)}
+								tabIndex={-1}
+								autoComplete="off"
+							/>
+						</div>
 						{/* Email / Username */}
 						<div>
 							<label htmlFor="identifier" className="block mb-2 text-sm font-medium text-text-secondary">
-								Email or Username
+								{t('email_username')}
 							</label>
 
 							<div className="relative">
@@ -97,7 +112,7 @@ export default function LoginPage() {
 						{/* Password */}
 						<div>
 							<label htmlFor="password" className="block mb-2 text-sm font-medium text-text-secondary">
-								Password
+								{t('password')}
 							</label>
 
 							<div className="relative">
@@ -117,11 +132,11 @@ export default function LoginPage() {
 						<div className="flex items-center justify-between gap-4 flex-wrap">
 							<label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
 								<input type="checkbox" name="remember" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="h-4 w-4 accent-primary border-border rounded" />
-								Remember me
+								{t('remember_me')}
 							</label>
 
 							<Link href="/auth/forgot-password" className="text-sm font-medium text-primary hover:underline">
-								Forgot password?
+								{t('forgot_password')}
 							</Link>
 						</div>
 
@@ -134,7 +149,7 @@ export default function LoginPage() {
 								</>
 							) : (
 								<>
-									Log In
+									{t('login')}
 									<i className="fa-solid fa-arrow-right" />
 								</>
 							)}
@@ -144,9 +159,9 @@ export default function LoginPage() {
 					{/* Footer */}
 					<footer className="mt-8 text-center">
 						<p className="text-sm text-text-secondary">
-							Don&apos;t have an account?
+							{t('dont_have_account')}
 							<Link href="/auth/register" className="ml-1 font-semibold text-primary hover:underline">
-								Sign Up
+								{t('signup')}
 							</Link>
 						</p>
 					</footer>
