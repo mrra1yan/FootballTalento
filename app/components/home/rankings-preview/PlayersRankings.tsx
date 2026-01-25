@@ -84,7 +84,7 @@ export default function PlayersRankings() {
 						<div className="min-w-0">
 							<div className="font-semibold text-text truncate">{player.name}</div>
 							<div className="text-sm text-text-secondary">
-								{t(player.position.toLowerCase().replace(/ /g, '_') as any)} • {player.age} {t('years')}
+								{t(player.position.toLowerCase().replace(/ /g, '_'))} • {player.age} {t('years')}
 							</div>
 						</div>
 					</div>

@@ -27,9 +27,10 @@ function VerifyEmailContent() {
                     setStatus("success");
                     setMessage(response.message || "Your email has been verified successfully!");
                 }
-            } catch (error: any) {
+            } catch (error) {
                 setStatus("error");
-                setMessage(error.message || "Email verification failed. The link may be invalid or expired.");
+                const errorMessage = error instanceof Error ? error.message : "Email verification failed. The link may be invalid or expired.";
+                setMessage(errorMessage);
             }
         };
 

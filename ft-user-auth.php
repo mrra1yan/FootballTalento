@@ -167,7 +167,7 @@ if (!function_exists('ft_register_user')) {
     update_user_meta($user_id, '_ft_verification_token', $verification_token);
     
     // Generate frontend URL for verification link
-    $frontend_url = 'http://localhost:3000'; // Should be dynamic in production
+    $frontend_url = 'https://footballtalento.com'; // Should be dynamic in production
     $verification_link = $frontend_url . '/auth/verify-email?token=' . $verification_token;
     
     // Send verification email in user language
@@ -177,7 +177,7 @@ if (!function_exists('ft_register_user')) {
     
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
-        'From: FootballTalento <noreply@docstec.site>'
+        'From: FootballTalento <noreply@footballtalento.com>'
     );
     
     wp_mail($to, $subject, $message, $headers);
@@ -410,7 +410,7 @@ function ft_forgot_password($request) {
     }
     
     // Get frontend URL for reset link - UPDATE THIS!
-    $frontend_url = 'http://localhost:3000';
+    $frontend_url = 'https://footballtalento.com';
     $reset_link = $frontend_url . '/auth/reset-password?token=' . $reset_token;
     
     // Send HTML email with YOUR COLORS
@@ -420,7 +420,7 @@ function ft_forgot_password($request) {
     
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
-        'From: FootballTalento <noreply@docstec.site>'
+        'From: FootballTalento <noreply@footballtalento.com>'
     );
     
     wp_mail($to, $subject, $message, $headers);
@@ -490,7 +490,7 @@ function ft_verify_email($request) {
     
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
-        'From: FootballTalento <noreply@docstec.site>'
+        'From: FootballTalento <noreply@footballtalento.com>'
     );
     
     wp_mail($to, $subject, $message, $headers);
@@ -582,7 +582,7 @@ function ft_reset_password($request) {
     
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
-        'From: FootballTalento <noreply@docstec.site>'
+        'From: FootballTalento <noreply@footballtalento.com>'
     );
     
     wp_mail($to, $subject, $message, $headers);
@@ -701,7 +701,7 @@ function ft_get_welcome_email_template($user, $account_type, $country, $currency
     $account_type_display = isset($account_types[$account_type]) ? $account_types[$account_type] : ucfirst($account_type);
     
     // Get login URL
-    $login_url = 'http://localhost:3000/auth/login'; // Update this to your frontend login URL
+    $login_url = 'https://footballtalento.com/auth/login'; // Update this to your frontend login URL
     
     return '
 <!DOCTYPE html>
@@ -720,9 +720,6 @@ function ft_get_welcome_email_template($user, $account_type, $country, $currency
                     <!-- Header -->
                     <tr>
                         <td style="background: linear-gradient(135deg, #045694 0%, #0a84ff 100%); padding: 40px 30px; text-align: center;">
-                            <div style="width: 60px; height: 60px; background-color: #ffffff; border-radius: 12px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
-                                <span style="font-size: 32px;">⚽</span>
-                            </div>
                             <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 800;">Welcome to FootballTalento!</h1>
                             <p style="margin: 10px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 14px;">Your account has been created successfully</p>
                         </td>
@@ -741,7 +738,7 @@ function ft_get_welcome_email_template($user, $account_type, $country, $currency
                             <!-- Success Box -->
                             <div style="background-color: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 10px; padding: 20px; margin: 30px 0;">
                                 <p style="margin: 0 0 10px; color: #22c55e; font-size: 14px; font-weight: 600;">
-                                    ✓ Registration Successful
+                                    Registration Successful
                                 </p>
                                 <p style="margin: 0; color: #505b73; font-size: 14px; line-height: 1.5;">
                                     Your account was created on <strong style="color: #03122b;">' . date('F j, Y \a\t g:i A') . '</strong>
@@ -816,7 +813,7 @@ function ft_get_welcome_email_template($user, $account_type, $country, $currency
                                 </p>
                                 <p style="margin: 0; color: #505b73; font-size: 13px; line-height: 1.6;">
                                     Our support team is here for you at<br>
-                                    <a href="mailto:support@docstec.site" style="color: #0a84ff; text-decoration: none; font-weight: 600;">support@docstec.site</a>
+                                    <a href="mailto:support@footballtalento.com" style="color: #0a84ff; text-decoration: none; font-weight: 600;">support@footballtalento.com</a>
                                 </p>
                             </div>
                         </td>
@@ -830,7 +827,7 @@ function ft_get_welcome_email_template($user, $account_type, $country, $currency
                                 <strong style="color: #045694;">FootballTalento Team</strong>
                             </p>
                             <div style="margin: 20px 0;">
-                                <a href="https://docstec.site" style="color: #0a84ff; text-decoration: none; font-size: 13px; margin: 0 10px;">Website</a>
+                                <a href="https://footballtalento.com" style="color: #0a84ff; text-decoration: none; font-size: 13px; margin: 0 10px;">Website</a>
                                 <span style="color: #aab0be;">•</span>
                                 <a href="#" style="color: #0a84ff; text-decoration: none; font-size: 13px; margin: 0 10px;">Support</a>
                                 <span style="color: #aab0be;">•</span>
@@ -959,7 +956,7 @@ function ft_get_password_changed_email_template($user, $lang = 'en') {
                             <table role="presentation" style="margin: 30px 0; width: 100%;">
                                 <tr>
                                     <td align="center">
-                                        <a href="http://localhost:3000/auth/login" style="display: inline-block; background: linear-gradient(135deg, #045694 0%, #0a84ff 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 10px; font-weight: 700; font-size: 16px; box-shadow: 0 4px 15px rgba(4, 86, 148, 0.3);">
+                                        <a href="https://footballtalento.com/auth/login" style="display: inline-block; background: linear-gradient(135deg, #045694 0%, #0a84ff 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 10px; font-weight: 700; font-size: 16px; box-shadow: 0 4px 15px rgba(4, 86, 148, 0.3);">
                             </div>
                         </td>
                     </tr>
@@ -972,7 +969,7 @@ function ft_get_password_changed_email_template($user, $lang = 'en') {
                                 <strong style="color: #045694;">FootballTalento Team</strong>
                             </p>
                             <div style="margin: 20px 0;">
-                                <a href="https://docstec.site" style="color: #0a84ff; text-decoration: none; font-size: 13px; margin: 0 10px;">Website</a>
+                                <a href="https://footballtalento.com" style="color: #0a84ff; text-decoration: none; font-size: 13px; margin: 0 10px;">Website</a>
                                 <span style="color: #aab0be;">•</span>
                                 <a href="#" style="color: #0a84ff; text-decoration: none; font-size: 13px; margin: 0 10px;">Support</a>
                                 <span style="color: #aab0be;">•</span>
@@ -1086,9 +1083,6 @@ function ft_get_verification_email_template($name, $link, $lang = 'en') {
                 <table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(4, 86, 148, 0.1);">
                     <tr>
                         <td style="background: linear-gradient(135deg, #045694 0%, #0a84ff 100%); padding: 40px 30px; text-align: center;">
-                            <div style="width: 60px; height: 60px; background-color: #ffffff; border-radius: 12px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
-                                <span style="font-size: 32px;">⚽</span>
-                            </div>
                             <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 800;">' . $title . '</h1>
                         </td>
                     </tr>
@@ -1325,7 +1319,7 @@ function ft_get_welcome_email_template($user, $account_type, $country, $currency
         'fan' => 'Fan'
     );
     $account_type_display = isset($account_types[$account_type]) ? $account_types[$account_type] : ucfirst($account_type);
-    $login_url = 'http://localhost:3000/auth/login';
+    $login_url = 'https://footballtalento.com/auth/login';
     $dir = ($lang === 'ar') ? 'rtl' : 'ltr';
 
     return '
@@ -1343,9 +1337,6 @@ function ft_get_welcome_email_template($user, $account_type, $country, $currency
                 <table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(4, 86, 148, 0.1);">
                     <tr>
                         <td style="background: linear-gradient(135deg, #045694 0%, #0a84ff 100%); padding: 40px 30px; text-align: center;">
-                            <div style="width: 60px; height: 60px; background-color: #ffffff; border-radius: 12px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
-                                <span style="font-size: 32px;">⚽</span>
-                            </div>
                             <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 800;">' . $title . '</h1>
                             <p style="margin: 10px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 14px;">' . $subtitle . '</p>
                         </td>
@@ -1439,7 +1430,7 @@ function ft_get_string($key, $lang = 'en') {
             'welcome_subtitle' => 'Your account has been created successfully',
             'hi' => 'Hi',
             'thank_you_joining' => 'Thank you for joining FootballTalento! We\'re excited to have you as part of our community.',
-            'reg_successful' => '✓ Registration Successful',
+            'reg_successful' => 'Registration Successful',
             'acc_created_on' => 'Your account was created on',
             'acc_details' => 'Your Account Details',
             'email_label' => 'Email:',
@@ -1478,7 +1469,7 @@ function ft_get_string($key, $lang = 'en') {
             'welcome_subtitle' => 'تم إنشاء حسابك بنجاح',
             'hi' => 'مرحباً',
             'thank_you_joining' => 'شكراً لانضمامك إلى FootballTalento! نحن متحمسون لوجودك كجزء من مجتمعنا.',
-            'reg_successful' => '✓ تم التسجيل بنجاح',
+            'reg_successful' => ' تم التسجيل بنجاح',
             'acc_created_on' => 'تم إنشاء حسابك في',
             'acc_details' => 'تفاصيل حسابك',
             'email_label' => 'البريد الإلكتروني:',
@@ -1509,7 +1500,7 @@ function ft_get_string($key, $lang = 'en') {
             'welcome_subject' => 'Bienvenue sur FootballTalento - E-mail vérifié',
             'welcome_title' => 'Bienvenue sur FootballTalento !',
             'hi' => 'Bonjour',
-            'reg_successful' => '✓ Inscription réussie',
+            'reg_successful' => ' Inscription réussie',
             'signin_btn' => 'Se connecter à votre compte',
             'verify_title' => 'Vérifiez votre e-mail',
             'verify_btn' => 'Vérifier l\'adresse e-mail',
@@ -1523,7 +1514,7 @@ function ft_get_string($key, $lang = 'en') {
             'welcome_subject' => 'Bienvenido a FootballTalento - Correo verificado',
             'welcome_title' => '¡Bienvenido a FootballTalento!',
             'hi' => 'Hola',
-            'reg_successful' => '✓ Registro exitoso',
+            'reg_successful' => ' Registro exitoso',
             'signin_btn' => 'Inicia sesión en tu cuenta',
             'verify_title' => 'Verifica tu correo',
             'verify_btn' => 'Verificar correo',
@@ -1537,7 +1528,7 @@ function ft_get_string($key, $lang = 'en') {
             'welcome_subject' => 'Benvenuto su FootballTalento - Email verificata',
             'welcome_title' => 'Benvenuto su FootballTalento!',
             'hi' => 'Ciao',
-            'reg_successful' => '✓ Registrazione completata',
+            'reg_successful' => ' Registrazione completata',
             'signin_btn' => 'Accedi al tuo account',
             'verify_title' => 'Verifica la tua email',
             'verify_btn' => 'Verifica indirizzo email',
@@ -1551,7 +1542,7 @@ function ft_get_string($key, $lang = 'en') {
             'welcome_subject' => 'Willkommen bei FootballTalento - E-Mail verifiziert',
             'welcome_title' => 'Willkommen bei FootballTalento!',
             'hi' => 'Hallo',
-            'reg_successful' => '✓ Registrierung erfolgreich',
+            'reg_successful' => ' Registrierung erfolgreich',
             'signin_btn' => 'In Ihr Konto einloggen',
             'verify_title' => 'E-Mail verifizieren',
             'verify_btn' => 'E-Mail-Adresse bestätigen',
@@ -1565,7 +1556,7 @@ function ft_get_string($key, $lang = 'en') {
             'welcome_subject' => 'Bem-vindo ao FootballTalento - E-mail verificado',
             'welcome_title' => 'Bem-vindo ao FootballTalento!',
             'hi' => 'Olá',
-            'reg_successful' => '✓ Registro bem-sucedido',
+            'reg_successful' => ' Registro bem-sucedido',
             'signin_btn' => 'Entrar na sua conta',
             'verify_title' => 'Verifique seu e-mail',
             'verify_btn' => 'Verificar endereço de e-mail',
@@ -1579,7 +1570,7 @@ function ft_get_string($key, $lang = 'en') {
             'welcome_subject' => 'FootballTalento\'ya Hoş Geldiniz - E-posta Doğrulandı',
             'welcome_title' => 'FootballTalento\'ya Hoş Geldiniz!',
             'hi' => 'Merhaba',
-            'reg_successful' => '✓ Kayıt Başarılı',
+            'reg_successful' => ' Kayıt Başarılı',
             'signin_btn' => 'Hesabınıza Giriş Yapın',
             'verify_title' => 'E-postanızı Doğrulayın',
             'verify_btn' => 'E-posta Adresini Doğrula',

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { login as loginUser } from "@/lib/api/auth";
 import { useAuthStore } from "@/store/authStore";
-import type { ApiError } from "@/types/auth";
+import { isApiError } from "@/types/auth";
 import { useTranslation } from "@/lib/i18n";
 
 export default function LoginPage() {
@@ -60,8 +60,8 @@ export default function LoginPage() {
 				}, 1000);
 			}
 		} catch (error) {
-			const apiError = error as ApiError;
-			toast.error(apiError.message || "Login failed. Please check your credentials.");
+			const errorMessage = isApiError(error) ? error.message : "Login failed. Please check your credentials.";
+			toast.error(errorMessage);
 		} finally {
 			setIsSubmitting(false);
 		}

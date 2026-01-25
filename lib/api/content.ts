@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://docstec.site/wp-json/footballtalento/v1';
-const FT_API_KEY = process.env.NEXT_PUBLIC_FT_API_KEY || 'ft_secret_key_2024_01_25';
+const FT_API_KEY = process.env.NEXT_PUBLIC_FT_API_KEY || '';
 
 export interface HomeContent {
     slides: {
@@ -45,7 +45,6 @@ export const getHomeContent = async (lang: string = 'en'): Promise<HomeContent> 
         }
         throw new Error('Failed to fetch home content');
     } catch (error) {
-        console.error('Error fetching home content:', error);
         throw error;
     }
 };

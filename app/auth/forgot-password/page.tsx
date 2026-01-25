@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { forgotPassword } from "@/lib/api/auth";
-import type { ApiError } from "@/types/auth";
+import { isApiError } from "@/types/auth";
 import { useTranslation } from "@/lib/i18n";
 
 export default function ForgotPasswordPage() {
@@ -31,8 +31,8 @@ export default function ForgotPasswordPage() {
 				toast.success("Password reset instructions sent to your email");
 			}
 		} catch (error) {
-			const apiError = error as ApiError;
-			toast.error(apiError.message || "Failed to send reset email. Please try again.");
+			const errorMessage = isApiError(error) ? error.message : "Failed to send reset email. Please try again.";
+			toast.error(errorMessage);
 		} finally {
 			setIsSubmitting(false);
 		}

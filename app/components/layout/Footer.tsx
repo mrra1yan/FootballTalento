@@ -22,9 +22,15 @@ export default function Footer() {
 						<p className="text-surface leading-relaxed mb-6 max-w-md">{t('footer_desc')}</p>
 
 						<div className="flex gap-3">
-							{["facebook-f", "twitter", "instagram", "youtube", "linkedin-in"].map((icon) => (
-								<a key={icon} href="#" className="w-10 h-10 rounded-lg border border-border flex items-center justify-center text-surface hover:bg-surface hover:text-primary transition">
-									<i className={`fab fa-${icon}`} />
+							{[
+								{ icon: "facebook-f", label: "Facebook" },
+								{ icon: "twitter", label: "Twitter" },
+								{ icon: "instagram", label: "Instagram" },
+								{ icon: "youtube", label: "YouTube" },
+								{ icon: "linkedin-in", label: "LinkedIn" }
+							].map(({ icon, label }) => (
+								<a key={icon} href="#" aria-label={`Follow us on ${label}`} className="w-10 h-10 rounded-lg border border-border flex items-center justify-center text-surface hover:bg-surface hover:text-primary transition">
+									<i className={`fab fa-${icon}`} aria-hidden="true" />
 								</a>
 							))}
 						</div>

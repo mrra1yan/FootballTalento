@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { register as registerUser } from "@/lib/api/auth";
 import { countries, currencies } from "@/lib/data/countries";
-import type { ApiError } from "@/types/auth";
-import { useTranslation, useLanguageStore } from "@/lib/i18n";
+import { isApiError } from "@/types/auth";
+import { useTranslation, useLanguageStore, type Currency } from "@/lib/i18n";
 
 export default function RegisterPage() {
 	const router = useRouter();
@@ -107,8 +107,8 @@ export default function RegisterPage() {
 				}
 			}
 		} catch (error) {
-			const apiError = error as ApiError;
-			toast.error(apiError.message || "Registration failed. Please try again.");
+			const errorMessage = isApiError(error) ? error.message : "Registration failed. Please try again.";
+			toast.error(errorMessage);
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -118,26 +118,28 @@ export default function RegisterPage() {
 		<main className="min-h-screen flex items-center justify-center pt-16 sm:pt-36 sm:pb-18.25">
 			<div className="w-full max-w-2xl">
 				<div className="bg-surface border border-border rounded-2xl shadow-xl overflow-hidden">
-					{/* Header */}
-					<div className="border-b border-border bg-primary p-6 sm:p-8">
-						<div className="flex items-center gap-4">
-							<div className="w-12 h-12 bg-surface rounded-xl flex items-center justify-center">
-								<i className="fa-solid fa-user-plus text-primary text-lg" />
-							</div>
-							<div className="flex-1">
-								<h1 className="text-xl sm:text-2xl font-bold text-surface">{t('create_account')}</h1>
-								<p className="text-sm text-surface">{t('join_network')}</p>
+					{/* Header - Hidden when pending verification */}
+					{!isPendingVerification && (
+						<div className="border-b border-border bg-primary p-6 sm:p-8">
+							<div className="flex items-center gap-4">
+								<div className="w-12 h-12 bg-surface rounded-xl flex items-center justify-center">
+									<i className="fa-solid fa-user-plus text-primary text-lg" />
+								</div>
+								<div className="flex-1">
+									<h1 className="text-xl sm:text-2xl font-bold text-surface">{t('create_account')}</h1>
+									<p className="text-sm text-surface">{t('join_network')}</p>
 
-								{/* Progress Bar */}
-								<div className="mt-4">
-									<div className="h-1.5 w-full bg-surface/30 rounded-full overflow-hidden">
-										<div className="h-full bg-surface transition-all duration-300" style={{ width: `${progress}%` }} />
+									{/* Progress Bar */}
+									<div className="mt-4">
+										<div className="h-1.5 w-full bg-surface/30 rounded-full overflow-hidden">
+											<div className="h-full bg-surface transition-all duration-300" style={{ width: `${progress}%` }} />
+										</div>
+										<p className="mt-1 text-xs text-surface">Progress: {progress}%</p>
 									</div>
-									<p className="mt-1 text-xs text-surface">Progress: {progress}%</p>
 								</div>
 							</div>
 						</div>
-					</div>
+					)}
 
 					{/* Form */}
 					{isPendingVerification ? (
@@ -230,7 +232,7 @@ export default function RegisterPage() {
 										{t('preferred_currency')} <span className="text-red-500">*</span>
 									</label>
 									<div className="relative">
-										<select required value={currency} onChange={(e) => setCurrency(e.target.value as any)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20">
+										<select required value={currency} onChange={(e) => setCurrency(e.target.value as Currency)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20">
 											<option value="" disabled>
 												{t('select_currency')}
 											</option>

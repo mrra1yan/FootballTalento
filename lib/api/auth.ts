@@ -1,17 +1,17 @@
 // lib/api/auth.ts
 import axios, { AxiosError } from 'axios';
-import type { 
-  AuthResponse, 
-  RegisterData, 
-  LoginData, 
-  ForgotPasswordData, 
+import type {
+  AuthResponse,
+  RegisterData,
+  LoginData,
+  ForgotPasswordData,
   ResetPasswordData,
   ApiError,
-  User 
+  User
 } from '@/types/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://docstec.site/wp-json/footballtalento/v1';
-const FT_API_KEY = process.env.NEXT_PUBLIC_FT_API_KEY || 'ft_secret_key_2024_01_25';
+const FT_API_KEY = process.env.NEXT_PUBLIC_FT_API_KEY || '';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -55,7 +55,7 @@ api.interceptors.response.use(
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
   try {
     const response = await api.post<AuthResponse>('/register', data);
-    
+
     if (response.data.success && response.data.data?.token) {
       // Store token and user data
       localStorage.setItem('auth_token', response.data.data.token);
@@ -69,7 +69,7 @@ export const register = async (data: RegisterData): Promise<AuthResponse> => {
         currency: response.data.data.currency,
       }));
     }
-    
+
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -83,7 +83,7 @@ export const register = async (data: RegisterData): Promise<AuthResponse> => {
 export const login = async (data: LoginData): Promise<AuthResponse> => {
   try {
     const response = await api.post<AuthResponse>('/login', data);
-    
+
     if (response.data.success && response.data.data?.token) {
       // Store token and user data
       localStorage.setItem('auth_token', response.data.data.token);
@@ -97,7 +97,7 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
         currency: response.data.data.currency,
       }));
     }
-    
+
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -114,8 +114,8 @@ export const logout = async (): Promise<void> => {
     if (token) {
       await api.post('/logout', { token });
     }
-  } catch (error) {
-    console.error('Logout error:', error);
+  } catch {
+    // Silently handle logout errors - user will be logged out locally regardless
   } finally {
     // Clear local storage regardless of API call result
     localStorage.removeItem('auth_token');
@@ -175,10 +175,10 @@ export const verifyEmail = async (token: string): Promise<AuthResponse> => {
 // Get current user from localStorage
 export const getCurrentUser = (): User | null => {
   if (typeof window === 'undefined') return null;
-  
+
   const userStr = localStorage.getItem('user');
   if (!userStr) return null;
-  
+
   try {
     return JSON.parse(userStr);
   } catch {

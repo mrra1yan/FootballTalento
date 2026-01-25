@@ -114,8 +114,8 @@ export async function detectGeoLocation(): Promise<GeoInfo | null> {
         try {
             const result = await api();
             if (result) return result;
-        } catch (e) {
-            console.warn('Geo API fallback triggered:', e);
+        } catch {
+            // Try next API
             continue;
         }
     }

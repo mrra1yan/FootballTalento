@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(curl -s -X POST \"https://gxbabato.footballtalento.com/wp-json/footballtalento/v1/register\" -H \"Content-Type: application/json\" -H \"X-FT-API-Key: ft_secure_8822_primary_key\" -d '{\"\"fullName\"\":\"\"Test User\"\",\"\"email\"\":\"\"testuser123@test.com\"\",\"\"password\"\":\"\"Test123!@#\"\",\"\"accountType\"\":\"\"player\"\",\"\"country\"\":\"\"US\"\",\"\"currency\"\":\"\"USD\"\",\"\"language\"\":\"\"en\"\"}')",
+      "Bash(curl -s -X POST \"https://gxbabato.footballtalento.com/wp-json/footballtalento/v1/register\" -H \"Content-Type: application/json\" -H \"X-FT-API-Key: ft_secure_8822_primary_key\" -d '{\"\"fullName\"\":\"\"Test User\"\",\"\"email\"\":\"\"test@example.com\"\",\"\"password\"\":\"\"TestPass123!\"\",\"\"accountType\"\":\"\"player\"\",\"\"country\"\":\"\"US\"\",\"\"currency\"\":\"\"USD\"\"}')",
+      "Bash(curl:*)"
+    ]
+  }
+}

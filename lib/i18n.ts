@@ -8,6 +8,10 @@ import translations from './translations.json';
 
 export type Language = 'en' | 'ar' | 'fr' | 'es' | 'pt' | 'de' | 'it' | 'tr';
 export type Currency = 'USD' | 'EUR' | 'MAD' | 'AED' | 'TRY' | 'CHF';
+export type TranslationKey = keyof typeof translations['en'];
+
+// Type-safe translations object
+const typedTranslations = translations as Record<Language, Record<TranslationKey, string>>;
 
 interface LanguageState {
     language: Language;
@@ -90,12 +94,14 @@ export function useTranslation() {
         }
     }, [_hasHydrated, language]);
 
-    const t = (key: keyof typeof translations['en'], variables?: Record<string, string>) => {
+    const t = (key: TranslationKey | string, variables?: Record<string, string>) => {
         // During SSR or before hydration, use 'en'
         const lang = (mounted && _hasHydrated) ? language : 'en';
 
-        // @ts-ignore
-        let translation = translations[lang]?.[key] || translations['en']?.[key] || key;
+        const langTranslations = typedTranslations[lang] || typedTranslations['en'];
+        const fallbackTranslations = typedTranslations['en'];
+
+        let translation = langTranslations[key as TranslationKey] || fallbackTranslations[key as TranslationKey] || key;
 
         if (variables) {
             Object.entries(variables).forEach(([k, v]) => {

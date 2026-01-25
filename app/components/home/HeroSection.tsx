@@ -17,8 +17,8 @@ export default function HeroSection() {
 				if (data.slides && data.slides.length > 0) {
 					setSlides(data.slides);
 				}
-			} catch (error) {
-				console.error("Failed to load hero slides:", error);
+			} catch {
+				// Silently fail - will use fallback slides
 			} finally {
 				setLoading(false);
 			}

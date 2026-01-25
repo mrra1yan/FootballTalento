@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { resetPassword } from "@/lib/api/auth";
-import type { ApiError } from "@/types/auth";
+import { isApiError } from "@/types/auth";
 import { useTranslation } from "@/lib/i18n";
 
 function ResetPasswordContent() {
@@ -62,15 +62,14 @@ function ResetPasswordContent() {
 				setSuccess(true);
 			}
 		} catch (error) {
-			const apiError = error as ApiError;
-
-			if (apiError.code === 'expired_token') {
+			if (isApiError(error) && error.code === 'expired_token') {
 				toast.error("Reset link has expired. Please request a new one.");
 				setTimeout(() => {
 					router.push("/auth/forgot-password");
 				}, 2000);
 			} else {
-				toast.error(apiError.message || "Failed to reset password. Please try again.");
+				const errorMessage = isApiError(error) ? error.message : "Failed to reset password. Please try again.";
+				toast.error(errorMessage);
 			}
 		} finally {
 			setIsSubmitting(false);
