@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslation } from "@/lib/i18n";
 
 export default function Footer() {
+	const { t } = useTranslation();
 	return (
 		<footer className="bg-primary border-t border-border">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-8">
@@ -8,14 +12,14 @@ export default function Footer() {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
 					{/* Brand */}
 					<div className="lg:col-span-2">
-						<div className="flex items-center gap-3 mb-6">
+						<Link href="/" className="flex items-center gap-3 mb-6">
 							<div className="w-12 h-12 bg-surface rounded-lg flex items-center justify-center">
 								<i className="fa-regular fa-futbol text-primary text-xl" />
 							</div>
 							<span className="text-2xl font-bold text-surface">FootballTalento</span>
-						</div>
+						</Link>
 
-						<p className="text-surface leading-relaxed mb-6 max-w-md">The global platform where players showcase skills, clubs find talent, and scouts discover the next generation.</p>
+						<p className="text-surface leading-relaxed mb-6 max-w-md">{t('footer_desc')}</p>
 
 						<div className="flex gap-3">
 							{["facebook-f", "twitter", "instagram", "youtube", "linkedin-in"].map((icon) => (
@@ -28,26 +32,26 @@ export default function Footer() {
 
 					{/* Platform */}
 					<div>
-						<h3 className="font-semibold text-surface mb-4">Platform</h3>
+						<h3 className="font-semibold text-surface mb-4">{t('footer_platform')}</h3>
 						<ul className="space-y-3 text-sm">
 							<li>
 								<Link href="/#players" className="footer-link text-surface/90 hover:text-surface transition">
-									Explore Players
+									{t('explore_players')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/#rankings" className="footer-link text-surface/90 hover:text-surface transition">
-									Rankings
+									{t('rankings')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/#stories" className="footer-link text-surface/90 hover:text-surface transition">
-									Stories
+									{t('stories')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/#how-it-works" className="footer-link text-surface/90 hover:text-surface transition">
-									How It Works
+									{t('how_it_works')}
 								</Link>
 							</li>
 						</ul>
@@ -55,26 +59,26 @@ export default function Footer() {
 
 					{/* Register */}
 					<div>
-						<h3 className="font-semibold text-surface mb-4">Register</h3>
+						<h3 className="font-semibold text-surface mb-4">{t('footer_register')}</h3>
 						<ul className="space-y-3 text-sm">
 							<li>
 								<Link href="/register/player" className="footer-link text-surface/90 hover:text-surface transition">
-									Player Registration
+									{t('player_reg')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/register/club" className="footer-link text-surface/90 hover:text-surface transition">
-									Club Registration
+									{t('club_reg')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/register/scout" className="footer-link text-surface/90 hover:text-surface transition">
-									Scout Registration
+									{t('scout_reg')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/register/parent" className="footer-link text-surface/90 hover:text-surface transition">
-									Parent Account
+									{t('parent_account')}
 								</Link>
 							</li>
 						</ul>
@@ -82,36 +86,36 @@ export default function Footer() {
 
 					{/* Legal */}
 					<div>
-						<h3 className="font-semibold text-surface mb-4">Legal</h3>
+						<h3 className="font-semibold text-surface mb-4">{t('footer_legal')}</h3>
 						<ul className="space-y-3 text-sm">
 							<li>
 								<Link href="/privacy-policy" className="footer-link text-surface/90 hover:text-surface transition">
-									Privacy Policy
+									{t('privacy_policy')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/terms" className="footer-link text-surface/90 hover:text-surface transition">
-									Terms of Service
+									{t('terms_of_service')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/child-safety" className="footer-link text-surface/90 hover:text-surface transition">
-									Child Safety Policy
+									{t('child_safety')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/cookies" className="footer-link text-surface/90 hover:text-surface transition">
-									Cookie Policy
+									{t('cookie_policy')}
 								</Link>
 							</li>
 						</ul>
 					</div>
 				</div>
+			</div>
 
-				{/* Bottom */}
-				<div className="mt-16 pt-8 border-t border-surface/25">
-					<p className="text-sm text-center text-text-muted">© {new Date().getFullYear()} FootballTalento. All rights reserved.</p>
-				</div>
+			{/* Bottom */}
+			<div className="mt-16 pt-8 border-t border-surface/25">
+				<p className="text-sm text-center text-text-muted">{t('all_rights_reserved', { year: new Date().getFullYear().toString() })}</p>
 			</div>
 		</footer>
 	);

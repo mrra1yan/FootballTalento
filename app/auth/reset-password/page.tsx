@@ -6,11 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { resetPassword } from "@/lib/api/auth";
 import type { ApiError } from "@/types/auth";
+import { useTranslation } from "@/lib/i18n";
 
 function ResetPasswordContent() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
+	const { t } = useTranslation();
 
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -35,7 +37,7 @@ function ResetPasswordContent() {
 	};
 
 	const score = Object.values(rules).filter(Boolean).length;
-	const strengthLabel = score <= 2 ? "Weak" : score <= 4 ? "Medium" : "Strong";
+	const strengthLabel = score <= 2 ? t('weak') : score <= 4 ? t('medium') : t('strong');
 	const strengthColor = score <= 2 ? "bg-red-500" : score <= 4 ? "bg-amber-500" : "bg-accent";
 	const canSubmit = score === 5 && password === confirmPassword && confirmPassword.length > 0 && !isSubmitting;
 
@@ -61,7 +63,7 @@ function ResetPasswordContent() {
 			}
 		} catch (error) {
 			const apiError = error as ApiError;
-			
+
 			if (apiError.code === 'expired_token') {
 				toast.error("Reset link has expired. Please request a new one.");
 				setTimeout(() => {
@@ -92,29 +94,29 @@ function ResetPasswordContent() {
 						</div>
 
 						{/* Success Message */}
-						<h1 className="text-2xl sm:text-3xl font-bold text-text mb-4">Password Reset Successful!</h1>
-						<p className="text-text-secondary mb-8 leading-relaxed">Your password has been successfully reset. You can now use your new password to sign in to your FootballTalento account.</p>
+						<h1 className="text-2xl sm:text-3xl font-bold text-text mb-4">{t('success_reset_title')}</h1>
+						<p className="text-text-secondary mb-8 leading-relaxed">{t('success_reset_desc')}</p>
 
 						{/* Security Reminder */}
 						<div className="bg-green-50 border border-green-200 rounded-lg p-5 mb-8 text-left">
 							<div className="flex items-start gap-3">
 								<i className="fa-solid fa-shield-halved text-green-600 mt-1" />
 								<div>
-									<h4 className="text-text font-semibold mb-1">Security Reminder</h4>
-									<p className="text-sm text-text-secondary">Keep your password secure and don't share it with anyone. Enable two-factor authentication for added security.</p>
+									<h4 className="text-text font-semibold mb-1">{t('security_reminder')}</h4>
+									<p className="text-sm text-text-secondary">{t('security_reminder_desc')}</p>
 								</div>
 							</div>
 						</div>
 
 						{/* Continue Button */}
 						<Link href="/auth/login" className="inline-block w-full bg-linear-to-r from-primary to-accent text-surface font-semibold py-3.5 px-6 rounded-lg hover:shadow-lg hover:shadow-accent/20 transition-all duration-300 mb-4">
-							Continue to Login
+							{t('continue_to_login')}
 						</Link>
 
 						{/* Back to Home */}
 						<Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent transition-colors">
 							<i className="fa-solid fa-arrow-left" />
-							<span>Back to Home</span>
+							<span>{t('back_to_home')}</span>
 						</Link>
 					</div>
 
@@ -125,8 +127,8 @@ function ResetPasswordContent() {
 								<i className="fa-solid fa-info-circle text-accent" />
 							</div>
 							<div>
-								<h3 className="font-semibold text-text mb-1">What's Next?</h3>
-								<p className="text-sm text-text-secondary mb-2">Sign in with your new password and explore your FootballTalento dashboard.</p>
+								<h3 className="font-semibold text-text mb-1">{t('whats_next')}</h3>
+								<p className="text-sm text-text-secondary mb-2">{t('manage_profile_desc')}</p>
 								<ul className="text-sm text-text-secondary space-y-1">
 									<li>• Update your profile information</li>
 									<li>• Connect with the football community</li>
@@ -151,27 +153,27 @@ function ResetPasswordContent() {
 						<div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10">
 							<i className="fa-solid fa-key text-accent text-2xl" />
 						</div>
-						<h1 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2">Create New Password</h1>
-						<p className="text-text-secondary text-sm">Your new password must be different from previous passwords</p>
+						<h1 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2">{t('reset_password_title')}</h1>
+						<p className="text-text-secondary text-sm">{t('reset_password_subtitle')}</p>
 					</header>
 
 					{/* Form */}
 					<form onSubmit={handleSubmit} className="space-y-6">
 						{/* New Password */}
 						<div>
-							<label className="block text-sm font-medium text-text-secondary mb-2">New Password</label>
+							<label className="block text-sm font-medium text-text-secondary mb-2">{t('new_password')}</label>
 							<div className="relative">
-								<input 
-									type={showPassword ? "text" : "password"} 
-									value={password} 
-									onChange={(e) => setPassword(e.target.value)} 
+								<input
+									type={showPassword ? "text" : "password"}
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
 									required
 									placeholder="Enter new password"
-									className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-accent/30" 
+									className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-accent/30"
 								/>
-								<button 
-									type="button" 
-									onClick={() => setShowPassword(!showPassword)} 
+								<button
+									type="button"
+									onClick={() => setShowPassword(!showPassword)}
 									className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted"
 								>
 									<i className={`fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`} />
@@ -181,19 +183,19 @@ function ResetPasswordContent() {
 
 						{/* Confirm Password */}
 						<div>
-							<label className="block text-sm font-medium text-text-secondary mb-2">Confirm Password</label>
+							<label className="block text-sm font-medium text-text-secondary mb-2">{t('confirm_password')}</label>
 							<div className="relative">
-								<input 
-									type={showConfirm ? "text" : "password"} 
-									value={confirmPassword} 
-									onChange={(e) => setConfirmPassword(e.target.value)} 
+								<input
+									type={showConfirm ? "text" : "password"}
+									value={confirmPassword}
+									onChange={(e) => setConfirmPassword(e.target.value)}
 									required
 									placeholder="Confirm new password"
-									className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-accent/30" 
+									className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-accent/30"
 								/>
-								<button 
-									type="button" 
-									onClick={() => setShowConfirm(!showConfirm)} 
+								<button
+									type="button"
+									onClick={() => setShowConfirm(!showConfirm)}
 									className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted"
 								>
 									<i className={`fa-regular ${showConfirm ? "fa-eye-slash" : "fa-eye"}`} />
@@ -212,7 +214,7 @@ function ResetPasswordContent() {
 						{password && (
 							<div className="rounded-lg border border-border bg-bg p-5">
 								<div className="flex justify-between mb-3">
-									<span className="text-sm text-text-secondary">Password Strength</span>
+									<span className="text-sm text-text-secondary">{t('password_strength')}</span>
 									<span className={`text-sm font-semibold ${score <= 2 ? "text-red-500" : score <= 4 ? "text-amber-500" : "text-accent"}`}>
 										{strengthLabel}
 									</span>
@@ -223,28 +225,28 @@ function ResetPasswordContent() {
 								</div>
 
 								<ul className="space-y-1 text-sm">
-									<li className={rules.length ? "text-accent" : "text-text-muted"}>✓ Minimum 8 characters</li>
-									<li className={rules.upper ? "text-accent" : "text-text-muted"}>✓ At least 1 uppercase letter</li>
-									<li className={rules.lower ? "text-accent" : "text-text-muted"}>✓ At least 1 lowercase letter</li>
-									<li className={rules.number ? "text-accent" : "text-text-muted"}>✓ At least 1 number</li>
-									<li className={rules.special ? "text-accent" : "text-text-muted"}>✓ At least 1 special character</li>
+									<li className={rules.length ? "text-accent" : "text-text-muted"}>✓ {t('min_8_chars')}</li>
+									<li className={rules.upper ? "text-accent" : "text-text-muted"}>✓ {t('at_least_1_uppercase')}</li>
+									<li className={rules.lower ? "text-accent" : "text-text-muted"}>✓ {t('at_least_1_lowercase')}</li>
+									<li className={rules.number ? "text-accent" : "text-text-muted"}>✓ {t('at_least_1_number')}</li>
+									<li className={rules.special ? "text-accent" : "text-text-muted"}>✓ {t('at_least_1_special_char')}</li>
 								</ul>
 							</div>
 						)}
 
 						{/* Submit */}
-						<button 
-							type="submit" 
-							disabled={!canSubmit} 
+						<button
+							type="submit"
+							disabled={!canSubmit}
 							className="w-full rounded-lg bg-accent py-3.5 font-semibold text-white transition hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
 						>
 							{isSubmitting ? (
 								<span className="flex items-center justify-center gap-2">
 									<i className="fa-solid fa-spinner fa-spin" />
-									Resetting Password...
+									{t('resetting')}
 								</span>
 							) : (
-								"Reset Password"
+								t('reset_btn')
 							)}
 						</button>
 

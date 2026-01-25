@@ -7,11 +7,14 @@ import toast from "react-hot-toast";
 import { register as registerUser } from "@/lib/api/auth";
 import { countries, currencies } from "@/lib/data/countries";
 import type { ApiError } from "@/types/auth";
+import { useTranslation, useLanguageStore } from "@/lib/i18n";
 
 export default function RegisterPage() {
 	const router = useRouter();
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	
+	const { t, language } = useTranslation();
+	const { currency: globalCurrency } = useLanguageStore();
+
 	// Form fields
 	const [accountType, setAccountType] = useState("");
 	const [fullName, setFullName] = useState("");
@@ -19,10 +22,12 @@ export default function RegisterPage() {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [country, setCountry] = useState("");
-	const [currency, setCurrency] = useState("");
+	const [currency, setCurrency] = useState(globalCurrency);
 	const [parentConsent, setParentConsent] = useState(false);
 	const [termsAccepted, setTermsAccepted] = useState(false);
-	
+	const [website_url, setWebsiteUrl] = useState(""); // Honeypot field
+	const [isPendingVerification, setIsPendingVerification] = useState(false);
+
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -69,7 +74,7 @@ export default function RegisterPage() {
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		
+
 		if (!canSubmit) {
 			toast.error("Please fill all required fields correctly");
 			return;
@@ -85,16 +90,21 @@ export default function RegisterPage() {
 				accountType,
 				country,
 				currency,
+				language,
 				parentConsent: accountType === 'player' ? parentConsent : undefined,
+				website_url,
 			});
 
 			if (response.success) {
-				toast.success("Registration successful! Redirecting...");
-				
-				// Redirect to dashboard or home after successful registration
-				setTimeout(() => {
-					router.push("/dashboard");
-				}, 1500);
+				if (response.data?.unverified) {
+					setIsPendingVerification(true);
+					toast.success("Registration successful! Please check your email to verify your account.", { duration: 6000 });
+				} else {
+					toast.success("Registration successful! Redirecting...");
+					setTimeout(() => {
+						router.push("/dashboard");
+					}, 1500);
+				}
 			}
 		} catch (error) {
 			const apiError = error as ApiError;
@@ -115,8 +125,8 @@ export default function RegisterPage() {
 								<i className="fa-solid fa-user-plus text-primary text-lg" />
 							</div>
 							<div className="flex-1">
-								<h1 className="text-xl sm:text-2xl font-bold text-surface">Create Your Account</h1>
-								<p className="text-sm text-surface">Join the global football talent network</p>
+								<h1 className="text-xl sm:text-2xl font-bold text-surface">{t('create_account')}</h1>
+								<p className="text-sm text-surface">{t('join_network')}</p>
 
 								{/* Progress Bar */}
 								<div className="mt-4">
@@ -130,190 +140,210 @@ export default function RegisterPage() {
 					</div>
 
 					{/* Form */}
-					<form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6">
-						{/* Account Type */}
-						<div>
-							<label className="block mb-2 text-sm font-semibold">
-								Account Type <span className="text-red-500">*</span>
-							</label>
-							<select required value={accountType} onChange={(e) => setAccountType(e.target.value)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20">
-								<option value="" disabled>
-									Select your role
-								</option>
-								<option value="player">Player</option>
-								<option value="club">Club / Academy</option>
-								<option value="scout">Scout</option>
-								<option value="coach">Coach</option>
-								<option value="parent">Parent</option>
-								<option value="agent">Agent</option>
-								<option value="sponsor">Sponsor</option>
-								<option value="fan">Fan</option>
-							</select>
-						</div>
-
-						{/* Name & Email */}
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-							<div>
-								<label className="block mb-2 text-sm font-semibold">
-									Full Name <span className="text-red-500">*</span>
-								</label>
-								<input type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="John Doe" className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20" />
+					{isPendingVerification ? (
+						<div className="p-12 text-center space-y-6">
+							<div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+								<i className="fa-solid fa-envelope-circle-check text-4xl text-primary" />
 							</div>
-
-							<div>
-								<label className="block mb-2 text-sm font-semibold">
-									Email Address <span className="text-red-500">*</span>
-								</label>
-								<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="john@example.com" className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20" />
+							<h2 className="text-2xl font-bold text-text">{t('verify_email_title')}</h2>
+							<p className="text-text-muted max-w-md mx-auto">
+								{t('verify_email_desc', { email: email })}
+							</p>
+							<div className="pt-4">
+								<Link href="/auth/login" className="text-primary font-semibold hover:underline border border-primary/20 rounded-lg px-6 py-2 transition hover:bg-primary/5">
+									{t('back_to_login')}
+								</Link>
 							</div>
 						</div>
-
-						{/* Country & Currency */}
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+					) : (
+						<form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6">
+							{/* Honeypot Field - Hidden from users */}
+							<div className="hidden" aria-hidden="true">
+								<input
+									type="text"
+									name="website_url"
+									value={website_url}
+									onChange={(e) => setWebsiteUrl(e.target.value)}
+									tabIndex={-1}
+									autoComplete="off"
+								/>
+							</div>
+							{/* Account Type */}
 							<div>
 								<label className="block mb-2 text-sm font-semibold">
-									<i className="fa-solid fa-globe text-primary mr-2"></i>
-									Country <span className="text-red-500">*</span>
+									{t('account_type')} <span className="text-red-500">*</span>
 								</label>
-								<div className="relative">
-									<span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted">
-										<i className="fa-solid fa-flag" />
-									</span>
-									<select required value={country} onChange={(e) => setCountry(e.target.value)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 pl-12 focus:border-primary focus:outline-none focus:ring-primary/20">
-										<option value="" disabled>
-											Select your country
-										</option>
-										{countries.map((c) => (
-											<option key={c.code} value={c.code}>
-												{c.name}
+								<select required value={accountType} onChange={(e) => setAccountType(e.target.value)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20">
+									<option value="" disabled>
+										{t('select_your_role')}
+									</option>
+									<option value="player">{t('player')}</option>
+									<option value="club">{t('club_academy')}</option>
+									<option value="scout">{t('scout')}</option>
+									<option value="coach">{t('coach')}</option>
+									<option value="parent">{t('parent')}</option>
+									<option value="agent">{t('agent')}</option>
+									<option value="sponsor">{t('sponsor')}</option>
+									<option value="fan">{t('fan')}</option>
+								</select>
+							</div>
+
+							{/* Name & Email */}
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div>
+									<label className="block mb-2 text-sm font-semibold">
+										{t('full_name')} <span className="text-red-500">*</span>
+									</label>
+									<input type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder={t('john_doe_placeholder')} className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20" />
+								</div>
+
+								<div>
+									<label className="block mb-2 text-sm font-semibold">
+										{t('email_address')} <span className="text-red-500">*</span>
+									</label>
+									<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t('email_placeholder')} className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20" />
+								</div>
+							</div>
+
+							{/* Country & Currency */}
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div>
+									<label className="block mb-2 text-sm font-semibold">
+										{t('country')} <span className="text-red-500">*</span>
+									</label>
+									<div className="relative">
+										<select required value={country} onChange={(e) => setCountry(e.target.value)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20">
+											<option value="" disabled>
+												{t('select_your_country')}
 											</option>
-										))}
-									</select>
+											{countries.map((c) => (
+												<option key={c.code} value={c.code}>
+													{c.name}
+												</option>
+											))}
+										</select>
+									</div>
 								</div>
-							</div>
 
-							<div>
-								<label className="block mb-2 text-sm font-semibold">
-									<i className="fa-solid fa-money-bill-wave text-primary mr-2"></i>
-									Preferred Currency <span className="text-red-500">*</span>
-								</label>
-								<div className="relative">
-									<span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted">
-										<i className="fa-solid fa-dollar-sign" />
-									</span>
-									<select required value={currency} onChange={(e) => setCurrency(e.target.value)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 pl-12 focus:border-primary focus:outline-none focus:ring-primary/20">
-										<option value="" disabled>
-											Select currency
-										</option>
-										{currencies.map((c) => (
-											<option key={c.code} value={c.code}>
-												{c.name}
+								<div>
+									<label className="block mb-2 text-sm font-semibold">
+										{t('preferred_currency')} <span className="text-red-500">*</span>
+									</label>
+									<div className="relative">
+										<select required value={currency} onChange={(e) => setCurrency(e.target.value as any)} className="w-full rounded-lg border border-border bg-surface px-4 py-3 focus:border-primary focus:outline-none focus:ring-primary/20">
+											<option value="" disabled>
+												{t('select_currency')}
 											</option>
-										))}
-									</select>
+											{currencies.map((c) => (
+												<option key={c.code} value={c.code}>
+													{c.name}
+												</option>
+											))}
+										</select>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						{/* Password */}
-						<div>
-							<label className="block mb-2 text-sm font-semibold">
-								Password <span className="text-red-500">*</span>
-							</label>
-
-							<div className="relative">
-								<input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:border-primary focus:outline-none focus:ring-primary/20" />
-								<button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted">
-									<i className={`fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`} />
-								</button>
-							</div>
-
-							{/* Password Strength */}
-							{password && (
-								<div className="mt-4 rounded-lg border border-border bg-bg p-4">
-									<div className="flex justify-between mb-3">
-										<span className="text-xs font-semibold text-text-muted">PASSWORD STRENGTH</span>
-										<span className={`text-xs font-bold ${strengthLabel === "STRONG" ? "text-green-600" : strengthLabel === "MEDIUM" ? "text-amber-600" : "text-red-600"}`}>{strengthLabel}</span>
-									</div>
-
-									<div className="flex gap-1.5 mb-4">
-										{[1, 2, 3, 4, 5].map((i) => (
-											<div key={i} className={`h-1.5 flex-1 rounded-full ${strengthScore >= i ? "bg-primary" : "bg-border"}`} />
-										))}
-									</div>
-
-									<ul className="space-y-1 text-sm">
-										<li className={rules.length ? "text-primary" : "text-text-muted"}>✓ Minimum 8 characters</li>
-										<li className={rules.upper ? "text-primary" : "text-text-muted"}>✓ At least 1 uppercase letter</li>
-										<li className={rules.lower ? "text-primary" : "text-text-muted"}>✓ At least 1 lowercase letter</li>
-										<li className={rules.number ? "text-primary" : "text-text-muted"}>✓ At least 1 number</li>
-										<li className={rules.special ? "text-primary" : "text-text-muted"}>✓ At least 1 special character</li>
-									</ul>
-								</div>
-							)}
-						</div>
-
-						{/* Confirm Password */}
-						{password.length > 0 && (
+							{/* Password */}
 							<div>
 								<label className="block mb-2 text-sm font-semibold">
-									Confirm Password <span className="text-red-500">*</span>
+									{t('password')} <span className="text-red-500">*</span>
 								</label>
 
 								<div className="relative">
-									<input type={showConfirmPassword ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required placeholder="••••••••" className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:border-primary focus:outline-none focus:ring-primary/20" />
-									<button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted">
-										<i className={`fa-regular ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`} />
+									<input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:border-primary focus:outline-none focus:ring-primary/20" />
+									<button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted">
+										<i className={`fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`} />
 									</button>
 								</div>
 
-								{confirmPassword && password !== confirmPassword && <p className="mt-1 text-xs text-red-500">Passwords do not match</p>}
-								{confirmPassword && password === confirmPassword && <p className="mt-1 text-xs text-green-500">Passwords match!</p>}
-							</div>
-						)}
+								{/* Password Strength */}
+								{password && (
+									<div className="mt-4 rounded-lg border border-border bg-bg p-4">
+										<div className="flex justify-between mb-3">
+											<span className="text-xs font-semibold text-text-muted">{t('password_strength').toUpperCase()}</span>
+											<span className={`text-xs font-bold ${strengthLabel === t('strong') ? "text-green-600" : strengthLabel === t('medium') ? "text-amber-600" : "text-red-600"}`}>{strengthLabel}</span>
+										</div>
 
-						{/* Parent Consent for Players */}
-						{accountType === "player" && (
+										<div className="flex gap-1.5 mb-4">
+											{[1, 2, 3, 4, 5].map((i) => (
+												<div key={i} className={`h-1.5 flex-1 rounded-full ${strengthScore >= i ? "bg-primary" : "bg-border"}`} />
+											))}
+										</div>
+
+										<ul className="space-y-1 text-sm">
+											<li className={rules.length ? "text-primary" : "text-text-muted"}>✓ {t('min_8_chars')}</li>
+											<li className={rules.upper ? "text-primary" : "text-text-muted"}>✓ {t('at_least_1_uppercase')}</li>
+											<li className={rules.lower ? "text-primary" : "text-text-muted"}>✓ {t('at_least_1_lowercase')}</li>
+											<li className={rules.number ? "text-primary" : "text-text-muted"}>✓ {t('at_least_1_number')}</li>
+											<li className={rules.special ? "text-primary" : "text-text-muted"}>✓ {t('at_least_1_special_char')}</li>
+										</ul>
+									</div>
+								)}
+							</div>
+
+							{/* Confirm Password */}
+							{password.length > 0 && (
+								<div>
+									<label className="block mb-2 text-sm font-semibold">
+										{t('confirm_password')} <span className="text-red-500">*</span>
+									</label>
+
+									<div className="relative">
+										<input type={showConfirmPassword ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required placeholder="••••••••" className="w-full rounded-lg border border-border bg-surface px-4 py-3 pr-12 focus:border-primary focus:outline-none focus:ring-primary/20" />
+										<button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted">
+											<i className={`fa-regular ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`} />
+										</button>
+									</div>
+
+									{confirmPassword && password !== confirmPassword && <p className="mt-1 text-xs text-red-500">{t('passwords_do_not_match')}</p>}
+									{confirmPassword && password === confirmPassword && <p className="mt-1 text-xs text-green-500">{t('passwords_match')}</p>}
+								</div>
+							)}
+
+							{/* Parent Consent for Players */}
+							{accountType === "player" && (
+								<div className="flex items-start gap-3 bg-bg p-4 rounded-lg border border-border">
+									<input type="checkbox" checked={parentConsent} onChange={(e) => setParentConsent(e.target.checked)} className="h-5 w-5 accent-primary mt-0.5" />
+									<p className="text-sm text-text">{t('parent_consent_text')}</p>
+								</div>
+							)}
+
+							{/* Terms */}
 							<div className="flex items-start gap-3 bg-bg p-4 rounded-lg border border-border">
-								<input type="checkbox" checked={parentConsent} onChange={(e) => setParentConsent(e.target.checked)} className="h-5 w-5 accent-primary mt-0.5" />
-								<p className="text-sm text-text">I confirm that I have parental/guardian consent (required for players under 18)</p>
+								<input type="checkbox" required checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} className="h-5 w-5 accent-primary mt-0.5" />
+								<p className="text-sm text-text">
+									{t('agree_to_the')}{" "}
+									<Link href="/terms" className="text-primary font-semibold">
+										{t('terms_of_service')}
+									</Link>{" "}
+									{t('and')}{" "}
+									<Link href="/privacy" className="text-primary font-semibold">
+										{t('privacy_policy')}
+									</Link>
+								</p>
 							</div>
-						)}
 
-						{/* Terms */}
-						<div className="flex items-start gap-3 bg-bg p-4 rounded-lg border border-border">
-							<input type="checkbox" required checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} className="h-5 w-5 accent-primary mt-0.5" />
-							<p className="text-sm text-text">
-								I agree to the{" "}
-								<Link href="/terms" className="text-primary font-semibold">
-									Terms of Service
-								</Link>{" "}
-								and{" "}
-								<Link href="/privacy" className="text-primary font-semibold">
-									Privacy Policy
+							{/* Submit */}
+							<button type="submit" disabled={!canSubmit} className="w-full rounded-lg bg-primary py-4 font-bold text-white transition disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary">
+								{isSubmitting ? (
+									<span className="flex items-center justify-center gap-2">
+										<i className="fa-solid fa-spinner fa-spin" />
+										{t('creating_account')}
+									</span>
+								) : (
+									t('create_account_button')
+								)}
+							</button>
+
+							<p className="text-center text-sm text-text-muted">
+								{t('already_have_account')}{" "}
+								<Link href="/auth/login" className="text-primary font-semibold hover:underline">
+									{t('sign_in_here')}
 								</Link>
 							</p>
-						</div>
-
-						{/* Submit */}
-						<button type="submit" disabled={!canSubmit} className="w-full rounded-lg bg-primary py-4 font-bold text-white transition disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary">
-							{isSubmitting ? (
-								<span className="flex items-center justify-center gap-2">
-									<i className="fa-solid fa-spinner fa-spin" />
-									Creating Account...
-								</span>
-							) : (
-								"Create Account"
-							)}
-						</button>
-
-						<p className="text-center text-sm text-text-muted">
-							Already have an account?{" "}
-							<Link href="/auth/login" className="text-primary font-semibold hover:underline">
-								Sign in here
-							</Link>
-						</p>
-					</form>
+						</form>
+					)}
 				</div>
 			</div>
 		</main>

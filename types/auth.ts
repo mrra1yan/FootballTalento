@@ -21,6 +21,7 @@ export interface AuthResponse {
     country: string;
     currency: string;
     token: string;
+    unverified?: boolean;
   };
 }
 
@@ -31,13 +32,16 @@ export interface RegisterData {
   accountType: string;
   country: string;
   currency: string;
+  language: string;
   parentConsent?: boolean;
+  website_url?: string; // Honeypot
 }
 
 export interface LoginData {
   emailUsername: string;
   password: string;
   remember?: boolean;
+  website_url?: string; // Honeypot
 }
 
 export interface ForgotPasswordData {

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useTranslation } from "@/lib/i18n";
 
 type Player = {
 	id: number;
@@ -68,6 +69,7 @@ const players: Player[] = [
 ];
 
 export default function PlayersRankings() {
+	const { t } = useTranslation();
 	return (
 		<div className="space-y-3">
 			{players.map((player, index) => (
@@ -82,7 +84,7 @@ export default function PlayersRankings() {
 						<div className="min-w-0">
 							<div className="font-semibold text-text truncate">{player.name}</div>
 							<div className="text-sm text-text-secondary">
-								{player.position} • {player.age} years
+								{t(player.position.toLowerCase().replace(/ /g, '_') as any)} • {player.age} {t('years')}
 							</div>
 						</div>
 					</div>

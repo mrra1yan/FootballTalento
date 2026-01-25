@@ -5,15 +5,17 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { forgotPassword } from "@/lib/api/auth";
 import type { ApiError } from "@/types/auth";
+import { useTranslation } from "@/lib/i18n";
 
 export default function ForgotPasswordPage() {
+	const { t } = useTranslation();
 	const [email, setEmail] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [emailSent, setEmailSent] = useState(false);
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		
+
 		if (!email) {
 			toast.error("Please enter your email address");
 			return;
@@ -47,8 +49,8 @@ export default function ForgotPasswordPage() {
 							<i className="fa-solid fa-lock text-accent text-2xl" />
 						</div>
 
-						<h1 className="text-2xl sm:text-3xl font-bold text-text mb-2">Forgot Password?</h1>
-						<p className="text-text-secondary text-sm">No worries, we&apos;ll send you reset instructions</p>
+						<h1 className="text-2xl sm:text-3xl font-bold text-text mb-2">{t('forgot_password_title')}</h1>
+						<p className="text-text-secondary text-sm">{t('forgot_password_subtitle')}</p>
 					</header>
 
 					{/* Success Message */}
@@ -56,7 +58,7 @@ export default function ForgotPasswordPage() {
 						<div className="mb-6 p-4 bg-green-100/50 border border-green-500/30 rounded-lg">
 							<div className="flex items-center gap-3">
 								<i className="fa-solid fa-circle-check text-green-500"></i>
-								<span className="text-green-500 text-sm">Password reset instructions have been sent to your email</span>
+								<span className="text-green-500 text-sm">{t('reset_sent_text')}</span>
 							</div>
 						</div>
 					)}
@@ -66,7 +68,7 @@ export default function ForgotPasswordPage() {
 						{/* Email */}
 						<div>
 							<label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-2">
-								Email Address
+								{t('email_label')}
 							</label>
 
 							<div className="relative">
@@ -81,7 +83,7 @@ export default function ForgotPasswordPage() {
 						{/* Info Box */}
 						<div className="flex items-start gap-3 rounded-lg border border-border bg-bg p-4">
 							<i className="fa-solid fa-circle-info text-accent mt-0.5" />
-							<p className="text-sm text-text-secondary">We&apos;ll send you a reset link to your registered email address. Please check your inbox and spam folder.</p>
+							<p className="text-sm text-text-secondary">{t('forgot_password_info')}</p>
 						</div>
 
 						{/* Submit */}
@@ -89,12 +91,12 @@ export default function ForgotPasswordPage() {
 							{isSubmitting ? (
 								<span className="flex items-center justify-center gap-2">
 									<i className="fa-solid fa-spinner fa-spin" />
-									Sending...
+									{t('sending')}
 								</span>
 							) : emailSent ? (
-								"Email Sent"
+								t('email_sent_button')
 							) : (
-								"Send Reset Link"
+								t('send_reset_link')
 							)}
 						</button>
 
@@ -102,7 +104,7 @@ export default function ForgotPasswordPage() {
 						<div className="text-center">
 							<Link href="/auth/login" className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-accent">
 								<i className="fa-solid fa-arrow-left" />
-								<span>Back to Sign In</span>
+								<span>{t('back_to_sign_in')}</span>
 							</Link>
 						</div>
 
@@ -117,7 +119,7 @@ export default function ForgotPasswordPage() {
 									}}
 									className="text-sm text-primary hover:underline"
 								>
-									Try a different email address
+									{t('try_different_email')}
 								</button>
 							</div>
 						)}
@@ -131,8 +133,8 @@ export default function ForgotPasswordPage() {
 							<i className="fa-solid fa-lightbulb text-amber-500" />
 						</div>
 						<div>
-							<h3 className="font-semibold text-text mb-1">Security Tip</h3>
-							<p className="text-sm text-text-secondary">Never share your password reset link with anyone. Our team will never ask for your password.</p>
+							<h3 className="font-semibold text-text mb-1">{t('security_tip_title')}</h3>
+							<p className="text-sm text-text-secondary">{t('security_tip_desc')}</p>
 						</div>
 					</div>
 				</div>

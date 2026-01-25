@@ -11,12 +11,14 @@ import type {
 } from '@/types/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://docstec.site/wp-json/footballtalento/v1';
+const FT_API_KEY = process.env.NEXT_PUBLIC_FT_API_KEY || 'ft_secret_key_2024_01_25';
 
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'X-FT-API-Key': FT_API_KEY,
   },
   timeout: 10000,
 });
@@ -154,6 +156,19 @@ export const resetPassword = async (data: ResetPasswordData): Promise<AuthRespon
       throw error.response.data;
     }
     throw new Error('Failed to reset password. Please try again.');
+  }
+};
+
+// Verify email
+export const verifyEmail = async (token: string): Promise<AuthResponse> => {
+  try {
+    const response = await api.post<AuthResponse>('/verify-email', { token });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data;
+    }
+    throw new Error('Email verification failed. Please try again.');
   }
 };
 

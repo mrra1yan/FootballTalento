@@ -4,6 +4,7 @@ import { AuthProvider } from "./components/providers/AuthProvider";
 import "./globals.css";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
+import { GeoInitializer } from "./components/utils/GeoInitializer";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({
 			</head>
 			<body className="antialiased bg-background text-text-primary">
 				<AuthProvider>
+					<GeoInitializer />
 					<Header />
 					{children}
 					<Footer />

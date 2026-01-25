@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslation } from "@/lib/i18n";
+
 type Player = {
 	name: string;
 	age: number;
@@ -8,6 +12,7 @@ type Player = {
 };
 
 export default function PlayerCard({ player }: { player: Player }) {
+	const { t } = useTranslation();
 	return (
 		<div className="group bg-surface border border-border rounded-2xl p-3 transition hover:border-primary cursor-pointer flex flex-col">
 			{/* Image */}
@@ -17,7 +22,7 @@ export default function PlayerCard({ player }: { player: Player }) {
 				{player.verified && (
 					<div className="absolute top-3 right-3 flex items-center gap-1 bg-primary text-white px-1.5 py-1 rounded-full text-xs font-bold">
 						<i className="fa-solid fa-circle-check" />
-						Verified
+						{t('verified_badge')}
 					</div>
 				)}
 
@@ -31,9 +36,11 @@ export default function PlayerCard({ player }: { player: Player }) {
 			<div className="mb-2 sm:mb-4">
 				<h3 className="text-md sm:text-lg font-bold text-text mb-1">{player.name}</h3>
 				<div className="flex sm:items-center flex-col sm:flex-row gap-0 sm:gap-2 text-text-secondary text-sm">
-					<span>{player.age} years</span>
+					<span>{player.age} {t('years')}</span>
 					<span className="hidden sm:inline">•</span>
-					<span className="font-semibold text-primary">{player.position}</span>
+					<span className="font-semibold text-primary">
+						{t(player.position.toLowerCase().replace(/ /g, '_') as any)}
+					</span>
 				</div>
 			</div>
 		</div>
